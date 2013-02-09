@@ -42,48 +42,42 @@ package fr.citygame.un.utils
 		
 		public function initGame(pPseudo:String):void
 		{
-			if(_loader == null){
-				_loader = new URLLoader();
-				configureListeners(_loader);
-			}
-			
 			_urlVars = new URLVariables();
 			_urlVars.pseudo = pPseudo;
 			
-            _request = new URLRequest(Config.URL + "getDatasInit");
+			_request = new URLRequest(Config.URL + "getDatasInit");
 			_request.data = _urlVars;
 			_request.method = URLRequestMethod.POST;
-            try {
-                _loader.load(_request);
-            } catch (error:Error) {
-                trace("Unable to load requested document.");
-            }
+			
+			_send(_request);
+           
         }
 		
-		public function getJoueurs():void
+		private function _send(pRequest:URLRequest):void 
 		{
 			if(_loader == null){
 				_loader = new URLLoader();
 				configureListeners(_loader);
 			}
 			
-			_request = new URLRequest(Config.URL + "getJoueurs");
-			_request.method = URLRequestMethod.POST;
-            try {
-                _loader.load(_request);
+			try {
+                _loader.load(pRequest);
             } catch (error:Error) {
                 trace("Unable to load requested document.");
             }
+		}
+		
+		public function getJoueurs():void
+		{
+			_request = new URLRequest(Config.URL + "getJoueurs");
+			_request.method = URLRequestMethod.POST;
+            
+			_send(_request);
         }
 		
 		
 		public function sendPlayerMove(pIdPlayer:uint, pLocalisation:LocalisationVO):void
 		{
-			if(_loader == null){
-				_loader = new URLLoader();
-				configureListeners(_loader);
-			}
-			
 			_urlVars = new URLVariables();
 			_urlVars.id_joueur = 1;
 			_urlVars.latitude = pLocalisation.x;
@@ -92,11 +86,23 @@ package fr.citygame.un.utils
             _request = new URLRequest(Config.URL + "deplacement");
 			_request.data = _urlVars;
 			_request.method = URLRequestMethod.POST;
-            try {
-                _loader.load(_request);
-            } catch (error:Error) {
-                trace("Unable to load requested document.");
-            }
+			
+           _send(_request);
+        }
+		
+		public function sendShot(pIdPlayer:uint, pIdWeapon:uint, pDirection:Number, pPuissance:Number):void
+		{
+			_urlVars = new URLVariables();
+			_urlVars.id_joueur = pIdPlayer;
+			_urlVars.id_arme = pIdWeapon;
+			_urlVars.direction = pDirection;
+			_urlVars.puissance = pPuissance;
+			
+            _request = new URLRequest(Config.URL + "tir");
+			_request.data = _urlVars;
+			_request.method = URLRequestMethod.POST;
+			
+           _send(_request);
         }
  
         private function configureListeners(dispatcher:IEventDispatcher):void {

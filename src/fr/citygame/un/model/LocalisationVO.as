@@ -1,5 +1,6 @@
 package fr.citygame.un.model 
 {
+	import fr.citygame.un.utils.GeolocUtils;
 	/**
 	 * ...
 	 * @author Jon Lucas
@@ -24,6 +25,8 @@ package fr.citygame.un.model
 		{
 			latitude = pLatitude;
 			longitude = pLongitude;
+			
+			GeolocUtils.convertGeolocToXY(this);
 		}
 		
 		public function setXYValues(pX:Number, pY:Number):void

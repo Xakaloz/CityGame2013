@@ -35,7 +35,7 @@
                
                 private var _videoFile:String;
                
-                private var _buffer:Buffer;
+                private var _buffer:Sprite; // Buffer;
                
                 private var _endMenu:Boolean;
                
@@ -50,14 +50,14 @@
                 private var _lastRapportVideo:Number;
                 private var _playing:Boolean;
                
-                public function VideoPlayer()
+                public function Cinematics()
                 {
                         _viewController = new ViewController();
                        
-                        _sWidth = Config.stageVideo;
+                        _sWidth = Config.stageWidth;
                         _sHeight = Config.stageHeight;
                        
-                        _rapportVideo = 1280 / 720;
+                        _rapportVideo = 450 / 800;
                        
                         alpha = 0;
                        
@@ -77,55 +77,55 @@
                
                 private function onStageVideoAvailibility(event:StageVideoAvailabilityEvent):void
                 {                      
-                        trace("VideoPlayer :: " + event.availability);
-                        stage.removeEventListener(StageVideoAvailabilityEvent.STAGE_VIDEO_AVAILABILITY, onStageVideoAvailibility);
-                       
-                        if(Config.nc == null)   Config.nc = new NetConnection();
-                       
-                        _nc = Config.nc;
-                        _nc.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
-                        _nc.connect(null);
-                       
-                        if(_model.ns == null){
-                                Config.ns = new NetStream(_nc);
-                                Config.ns.client = this;
-                                //_model.ns.bufferTime = 5;
-                        }
-                       
-                        _ns = _model.ns;
-                        _ns.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
-                        _ns.addEventListener(IOErrorEvent.IO_ERROR, onIoErrorEvent);
-                       
-                        if (event.availability == StageVideoAvailability.AVAILABLE) {
-                                trace("VideoPlayer :: StageVideo");
-                               
-                                if(Config.stageVideo == null){
-                                        Config.stageVideo = stage.stageVideos[0];
-                                        Config.stageVideo.attachNetStream(_ns);
-                                }
-                               
-                                _myStageVideo = Config.stageVideo;
-                                _myStageVideo.addEventListener( StageVideoEvent.RENDER_STATE, stageVideoStateChange );
-                        } else {
-                                //use Video API for displaying the video
-                                trace("VideoPlayer :: Video API");
-                               
-                                _myVideo = new Video();
-                               
-                                _myVideo.x = _decX > 0 ? _decX : 0;
-                                _myVideo.y = _decY > 0 ? _decY : 0;
-                                _myVideo.width = _vWidth > 0 ? _vWidth : _sWidth;
-                                _myVideo.height = _vHeight > 0 ? _vHeight : _sHeight;
-                               
-                                _myVideo.attachNetStream(_ns);
-                               
-                                addChildAt(_myVideo, 0);
-                        }
-                       
-                        if(_playOnAdded){
-                                _ns.play(_videoFile);
-                                _playOnAdded = false;
-                        }
+					trace("VideoPlayer :: " + event.availability);
+					stage.removeEventListener(StageVideoAvailabilityEvent.STAGE_VIDEO_AVAILABILITY, onStageVideoAvailibility);
+				   
+					if(Config.nc == null)   Config.nc = new NetConnection();
+				   
+					_nc = Config.nc;
+					_nc.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
+					_nc.connect(null);
+				   
+					if(Config.ns == null){
+							Config.ns = new NetStream(_nc);
+							Config.ns.client = this;
+							//_model.ns.bufferTime = 5;
+					}
+				   
+					_ns = Config.ns;
+					_ns.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
+					_ns.addEventListener(IOErrorEvent.IO_ERROR, onIoErrorEvent);
+				   
+					/*if (event.availability == StageVideoAvailability.AVAILABLE) {
+							trace("VideoPlayer :: StageVideo");
+						   
+							if(Config.stageVideo == null){
+									Config.stageVideo = stage.stageVideos[0];
+									Config.stageVideo.attachNetStream(_ns);
+							}
+						   
+							_myStageVideo = Config.stageVideo;
+							_myStageVideo.addEventListener( StageVideoEvent.RENDER_STATE, stageVideoStateChange );
+					} else {*/
+							//use Video API for displaying the video
+							trace("VideoPlayer :: Video API");
+						   
+							_myVideo = new Video();
+						   
+							_myVideo.x = _decX > 0 ? _decX : 0;
+							_myVideo.y = _decY > 0 ? _decY : 0;
+							_myVideo.width = _vWidth > 0 ? _vWidth : _sWidth;
+							_myVideo.height = _vHeight > 0 ? _vHeight : _sHeight;
+						   
+							_myVideo.attachNetStream(_ns);
+						   
+							addChildAt(_myVideo, 0);
+				   // }
+				   
+					if(_playOnAdded){
+							_ns.play(_videoFile);
+							_playOnAdded = false;
+					}
                 }
 
                
@@ -143,30 +143,25 @@
                 /**
                  * Redimensionnement proportionnel de la vidéo.
                  */
-                private function resize(event:Event = null, fullfill:Boolean = false) : void
+                private function resize(event:Event = null, fullfill:Boolean = true) : void
                 {
-                        if(isNaN(_rapportStage)){
-                                _rapportStage = _sWidth / _sHeight;
-                               
-                                _vWidth = _sWidth;
-                                _vHeight = _sHeight;
-                               
-                                // Calcul de la taille de la vidéo pour qu'elle remplisse toujours l'écran en gardant ses proportions.
-                                if(_rapportStage < _rapportVideo){     
-                                        if(fullfill)    _vWidth = _vHeight * _rapportVideo;
-                                        else                    _vHeight = _vWidth / _rapportVideo;    
-                                } else {       
-                                        if(fullfill)    _vHeight = _vWidth / _rapportVideo;
-                                        else                    _vWidth = _vHeight * _rapportVideo;
-                                }
-                               
-                                // Calcul du décalage sur x et y pour que la vidéo soit toujours centrée.
-                                _decX = (_sWidth - _vWidth) * .5;
-                                _decY = (_sHeight - _vHeight) * .5;
-                        }      
+					if(isNaN(_rapportStage)){
+						_rapportStage = _sWidth / _sHeight;
+					   
+						_vWidth = _sWidth;
+						_vHeight = _sHeight;
+					   
+						// Calcul de la taille de la vidéo pour qu'elle remplisse toujours l'écran en gardant ses proportions.   
+						_vWidth = _vHeight * _rapportVideo;
+					   
+						// Calcul du décalage sur x et y pour que la vidéo soit toujours centrée.
+						_decX = (_sWidth - _vWidth) * .5;
+						_decY = (_sHeight - _vHeight) * .5;
+					}      
                        
-                        if(_myStageVideo){
-                                _myStageVideo.viewPort = new Rectangle(_decX, _decY, _vWidth, _vHeight);
+                        if (_myStageVideo) {
+							//trace(_decX, _decY, _vWidth, _vHeight);
+                            _myStageVideo.viewPort = new Rectangle(_decX, _decY, _vWidth, _vHeight);
                         }
                        
                         if(_myVideo){
@@ -200,7 +195,7 @@
                         var key:String;
                         for (key in infoObject)
                         {
-                                trace(key + ": " + infoObject[key]);
+                            trace(key + ": " + infoObject[key]);
                         }
                 }
                
@@ -228,7 +223,7 @@
                                 case "NetStream.Play.Stop":
                                         //trace("VideoPlayer :: NetStream.Play.Stop");
                                         removeBuffer();
-                                        _viewController.playVideo();
+                                        //_viewController.playVideo();
                                         break;
                                
                                 case "NetStream.Play.StreamNotFound":
@@ -273,7 +268,7 @@
                 private function showBuffer():void
                 {      
                         if(_buffer == null){
-                                _buffer = new Buffer();
+                                _buffer = new Sprite(); // Buffer();
                                 addChild(_buffer);                     
                         }
                         _buffer.x = _sWidth/2;
@@ -299,18 +294,16 @@
                
                 public function transiIn(params:Object=null):void
                 {
-                        addChild(_bt_retour);
-                       
-                        TweenNano.to(this, 0.5, { alpha:1, onComplete:
-                                function():void
-                                {
-                                        addListeners();
-                                       
-                                        showBuffer();
+					TweenNano.to(this, 0.5, { alpha:1, onComplete:
+						function():void
+						{
+							addListeners();
+						   
+							showBuffer();
 
-                                        playVideo(params.videoFile);
-                                }
-                        });
+							playVideo(params.videoFile);
+						}
+					});
                 }
                
                 public function transiOut():void
@@ -318,7 +311,7 @@
                         onRemove();
                        
                         TweenNano.to(this, 0.5, { alpha:0, onComplete:
-                                function(_this):void
+                                function(_this:Cinematics):void
                                 {
                                         parent.removeChild(_this);
                                 }
@@ -366,8 +359,11 @@
                         _ns.pause();
                        
                         removeBuffer();
-                       
-                        Utils.removeChild(_bt_retour, this);
                 }
+				
+				public function dispose():void
+				{
+					
+				}
         }
 } 
