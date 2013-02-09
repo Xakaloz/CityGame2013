@@ -165,10 +165,10 @@
                         }
                        
                         if(_myVideo){
-                                _myVideo.x = _decX;
-                                _myVideo.y = _decY;
-                                _myVideo.width = _vWidth;
-                                _myVideo.height = _vHeight;
+							_myVideo.x = _decX;
+							_myVideo.y = _decY;
+							_myVideo.width = _vWidth;
+							_myVideo.height = _vHeight;
                         }
                 }
                

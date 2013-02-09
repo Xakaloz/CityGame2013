@@ -13,8 +13,10 @@ package fr.citygame.un
 	import flash.ui.MultitouchInputMode;
 	import flash.utils.setTimeout;
 	import fr.citygame.un.controller.ScreenManager;
+	import fr.citygame.un.events.NavigationEvent;
 	import fr.citygame.un.model.Config;
 	import fr.citygame.un.model.LocalisationVO;
+	import fr.citygame.un.model.ScreenType;
 	import fr.citygame.un.utils.SendReceive;
 	import fr.citygame.un.view.Cinematics;
 	import fr.citygame.un.view.Game;
@@ -29,11 +31,17 @@ package fr.citygame.un
 	{
 		private var _starling:Starling;
 		
+		private var _cinematic:Cinematics;
+		private var _cinematicVisible:Boolean;
+		
+		
 		public function Main():void 
 		{
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.align = StageAlign.TOP_LEFT;
 			stage.addEventListener(Event.DEACTIVATE, deactivate);
+			
+			stage.color = 0x000000;
 			
 			NativeApplication.nativeApplication.systemIdleMode = SystemIdleMode.KEEP_AWAKE;
 			
@@ -57,6 +65,8 @@ package fr.citygame.un
 			
 			_starling.start();
 			
+			addEventListener(NavigationEvent.GOTO_SCREEN, _gotoScreenHandler);
+			
 			//setTimeout(_stopStarling, 10000);			
 			
 			//setTimeout(function():void { _starling.viewPort = new Rectangle(-32, -32, 32, 32); }, 2000);
@@ -65,6 +75,31 @@ package fr.citygame.un
 			
 			/*var vb:Vibration = new Vibration();
 			vb.vibrate(500);*/
+		}
+		
+		private function _gotoScreenHandler(e:NavigationEvent):void 
+		{
+			if (e.screenName == ScreenType.CINEMATICS) {
+				showCinematics();
+			} else {
+				if(_cinematicVisible)	hideCinematics();
+			}
+		}
+		
+		private function hideCinematics():void 
+		{
+			_cinematicVisible = false;
+			_cinematic.transiOut();
+		}
+		
+		private function showCinematics():void 
+		{
+			if (_cinematic == null) {
+				_cinematic = new Cinematics();
+				addChild(_cinematic);
+			}
+			_cinematicVisible = true;
+			_cinematic.transiIn();
 		}
 		
 		private function _stopStarling():void 

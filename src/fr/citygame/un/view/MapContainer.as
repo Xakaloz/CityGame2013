@@ -1,7 +1,9 @@
 package fr.citygame.un.view 
 {
+	import com.greensock.TweenNano;
+	import flash.events.TimerEvent;
 	import flash.geom.Point;
-	import fr.citygame.un.assets.Assets;
+	import flash.utils.Timer;
 	import fr.citygame.un.data.Data;
 	import fr.citygame.un.events.CompassEvent;
 	import fr.citygame.un.events.GpsEvent;
@@ -9,12 +11,8 @@ package fr.citygame.un.view
 	import fr.citygame.un.model.LocalisationVO;
 	import fr.citygame.un.utils.CompassUtils;
 	import fr.citygame.un.utils.GeolocUtils;
-	import starling.display.Image;
+	import fr.citygame.un.utils.SendReceive;
 	import starling.display.Sprite;
-	import starling.events.Touch;
-	import starling.events.TouchEvent;
-	import starling.events.TouchPhase;
-	import starling.textures.Texture;
 	import starling.utils.deg2rad;
 	
 	
@@ -29,19 +27,27 @@ package fr.citygame.un.view
 		
 		private var _map:Map;
 		private var _gpsUtils:GeolocUtils;
-		private var _player:Image;
 		private var _localisationVo:LocalisationVO;
+		private var _timer:Timer;
+		private var _player:Player;
+		private var _tabPlayers:Vector.<Player>;
 		
+		private var temp:int;
+		private var i:int;
 		
 		public function MapContainer() 
 		{
-			scaleX *= 2;
-			scaleY *= 2;
+			scaleX *= 1;
+			scaleY *= 1;
+			
+			_tabPlayers = new Vector.<Player>();
 			
 			_localisationVo = new LocalisationVO(0, 0, 0, 0);
-			//_localisationVo.setGeolocValues(47.204979, -1.563289);
+			_localisationVo.setGeolocValues(47.205555, -1.566658);
 			
-			//updatePosition(_localisationVo.x, _localisationVo.y);
+			_timer = new Timer(Config.DELAY);
+			
+			updatePosition(_localisationVo.x, _localisationVo.y);
 			
 			_map = new Map();
 			addChild(_map);	
@@ -51,34 +57,9 @@ package fr.citygame.un.view
 			_gpsUtils = new GeolocUtils();
 			_gpsUtils.start();
 			
-			
-			_player = new Image(Texture.fromBitmap(new Assets.SQUARE_RED()));
-			addChild(_player);
-			
-			_player.pivotX = _player.width / 2;
-			_player.pivotY = _player.height / 2;
-			
-			_player.x = _localisationVo.x;
-			_player.y = _localisationVo.y;
-			
 			//createPlayer(47.203541, -1.565986);
 			//createPlayer(47.204503,-1.568303);
 			//createPlayer(47.205898,-1.567742);
-		}
-		
-		private function createPlayer(longitude:Number, lattitude:Number):void 
-		{
-			var localisationVoP:LocalisationVO = new LocalisationVO(0, 0, 0, 0);
-			localisationVoP.setGeolocValues(longitude, lattitude);
-			
-			var player:Image = new Image(Texture.fromBitmap(new Assets.SQUARE()));
-			addChild(player);
-			
-			player.pivotX = player.width / 2;
-			player.pivotY = player.height / 2;
-			
-			player.x = localisationVoP.x;
-			player.y = localisationVoP.y;
 		}
 		
 		private function onGpsUpdate(e:GpsEvent):void 
@@ -91,9 +72,6 @@ package fr.citygame.un.view
 			_localisationVo.setGeolocValues(e.latitude, e.longitude);
 			
 			updatePosition(_localisationVo.x, _localisationVo.y);
-			
-			_player.x = _localisationVo.x;
-			_player.y = _localisationVo.y;
 		}
 		
 		private function updatePosition(x:Number, y:Number):void
@@ -118,6 +96,30 @@ package fr.citygame.un.view
 			//trace("X : " + this.x);
 			//trace("pivot X : "+this.pivotX);
 		}
+			
+		private function onTick(e:TimerEvent = null):void 
+		{
+			temp = _tabPlayers.length;
+			for (i = 0; i < temp; i++)
+			{
+				removeChild(_tabPlayers[i]);
+			}
+			
+			if (Data.playersVo && Data.playersVo.length > 0)
+			{
+				temp = Data.playersVo.length;
+				for (i = 0; i < temp; i++)
+				{
+					_player = new Player(Data.playersVo[i]);
+					addChild(_player);
+					
+					_tabPlayers.push(_player);
+				}
+			}
+			
+			SendReceive.getInstance().getJoueurs();
+			
+		}
 		
 		private function onCompassUpdate(e:CompassEvent):void 
 		{
@@ -138,26 +140,38 @@ package fr.citygame.un.view
 			
 			trace("transiIn()");
 			
+			alpha = 0;
+			
+			TweenNano.to(this, .5, { alpha: 1 } );
+			
+			onTick();
+			
+			_timer.start();
 			addListeners();
 		}
 		
 		public function transiOut():void 
 		{
+			_timer.reset();
 			removeListeners();
 			
-			//TweenNano.to(this, 0.2, { alpha : 0 } );
+			TweenNano.to(this, 0.5, { alpha : 0 } );
 		}
 		
 		public function addListeners():void 
 		{
 			_gpsUtils.addEventListener(GpsEvent.UPDATE, onGpsUpdate);
 			_compassUtils.addEventListener(CompassEvent.UPDATE, onCompassUpdate);
+			
+			_timer.addEventListener(TimerEvent.TIMER, onTick);
 		}
 		
 		public function removeListeners():void 
 		{
 			_gpsUtils.removeEventListener(GpsEvent.UPDATE, onGpsUpdate);
 			_compassUtils.removeEventListener(CompassEvent.UPDATE, onCompassUpdate);
+			
+			_timer.removeEventListener(TimerEvent.TIMER, onTick);
 		}
 		
 		public function initPosition():void 

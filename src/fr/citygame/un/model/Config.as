@@ -13,6 +13,8 @@ package fr.citygame.un.model
 		
 		public static const URL				:String = "http://addn.cleverapps.io/air/";
 		
+		public static const DELAY			:uint = 3000;
+		
 		public static var stageWidth		:Number;
 		public static var stageHeight		:Number;
 		

@@ -11,6 +11,7 @@ package fr.citygame.un.utils
 	import flash.net.URLRequest;
 	import flash.net.URLRequestMethod;
 	import flash.net.URLVariables;
+	import fr.citygame.un.data.DataParser;
 	import fr.citygame.un.model.Config;
 	import fr.citygame.un.model.LocalisationVO;
 	
@@ -21,12 +22,15 @@ package fr.citygame.un.utils
 	public class SendReceive 
 	{		
 		private var _loader						:URLLoader;
+		private var _loaderJoueurs				:URLLoader;
+		private var _loaderImpacts				:URLLoader;
 		private var _urlVars					:URLVariables;
 		private var _request					:URLRequest;
 		
 		//SINGLETON vars
 		private static var instance             :SendReceive;  //holds the singleton instance
 		private static var allowInstance        :Boolean;      //indicates if singleton instance was already created
+		private static var parser				:DataParser
 
 	   
 		/**
@@ -42,6 +46,8 @@ package fr.citygame.un.utils
 		
 		public function initGame(pPseudo:String):void
 		{
+			
+			
 			_urlVars = new URLVariables();
 			_urlVars.pseudo = pPseudo;
 			
@@ -49,19 +55,25 @@ package fr.citygame.un.utils
 			_request.data = _urlVars;
 			_request.method = URLRequestMethod.POST;
 			
-			_send(_request);
+			_send(_loader, _request);
            
         }
 		
-		private function _send(pRequest:URLRequest):void 
+		private function _send(loader:URLLoader, pRequest:URLRequest, name:String = ""):void 
 		{
-			if(_loader == null){
-				_loader = new URLLoader();
-				configureListeners(_loader);
+			if(loader == null){
+				loader = new URLLoader();
+				loader.dataFormat = name;
+				configureListeners(loader);
+			}
+			
+			if (parser == null)
+			{
+				parser = new DataParser();
 			}
 			
 			try {
-                _loader.load(pRequest);
+                loader.load(pRequest);
             } catch (error:Error) {
                 trace("Unable to load requested document.");
             }
@@ -72,9 +84,16 @@ package fr.citygame.un.utils
 			_request = new URLRequest(Config.URL + "getJoueurs");
 			_request.method = URLRequestMethod.POST;
             
-			_send(_request);
+			_send(_loaderJoueurs, _request, "Joueurs");
         }
 		
+		public function getImpacts():void
+		{
+			_request = new URLRequest(Config.URL + "getImpacts");
+			_request.method = URLRequestMethod.POST;
+            
+			_send(_loaderImpacts, _request, "Impacts");
+        }
 		
 		public function sendPlayerMove(pIdPlayer:uint, pLocalisation:LocalisationVO):void
 		{
@@ -87,7 +106,7 @@ package fr.citygame.un.utils
 			_request.data = _urlVars;
 			_request.method = URLRequestMethod.POST;
 			
-           _send(_request);
+           _send(_loader, _request);
         }
 		
 		public function sendShot(pIdPlayer:uint, pIdWeapon:uint, pDirection:Number, pPuissance:Number):void
@@ -102,7 +121,7 @@ package fr.citygame.un.utils
 			_request.data = _urlVars;
 			_request.method = URLRequestMethod.POST;
 			
-           _send(_request);
+           _send(_loader, _request);
         }
  
         private function configureListeners(dispatcher:IEventDispatcher):void {
@@ -115,7 +134,21 @@ package fr.citygame.un.utils
         }
  
         private function completeHandler(event:Event):void {
-            trace("completeHandler: " + _loader.data);
+            trace("completeHandler: " + event.currentTarget.data);
+			
+			switch(URLLoader(event.currentTarget).dataFormat)
+			{
+				case "Joueurs":
+					trace("JOUEURS");
+					parser.parseJoueurs(XML(event.currentTarget.data));
+					
+					break;
+				case "":
+					trace("LOADER");
+					parser.parseImpacts(XML(event.currentTarget.data));
+					break;
+			}
+			
         }
  
         private function openHandler(event:Event):void {

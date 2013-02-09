@@ -1,6 +1,7 @@
 package fr.citygame.un.view 
 {
 	import fr.citygame.un.controller.ScreenManager;
+	import fr.citygame.un.events.NavigationEvent;
 	import fr.citygame.un.model.ScreenType;
 	import starling.display.Sprite;
 	import starling.events.Event;
@@ -25,10 +26,21 @@ package fr.citygame.un.view
 			_screenManager = new ScreenManager(this);
 			_screenManager.addScreen(ScreenType.HOME, 				new Home(), 			[ScreenType.MAIN_MENU, ScreenType.CINEMATICS]);
 			_screenManager.addScreen(ScreenType.MAIN_MENU, 			new MainMenu(), 		[ScreenType.GAME_INTERFACE]);
-			_screenManager.addScreen(ScreenType.GAME_INTERFACE, 	new GameInterface(), 	[ScreenType.CINEMATICS, ScreenType.SCORES]);
+			_screenManager.addScreen(ScreenType.GAME_INTERFACE, 	new GameInterface(), 	[ScreenType.MAIN_MENU, ScreenType.CINEMATICS, ScreenType.SCORES]);
 			_screenManager.addScreen(ScreenType.SCORES, 			new Scores(), 			[ScreenType.CREDITS]);
 			_screenManager.addScreen(ScreenType.CREDITS, 			new Credits(), 			[ScreenType.HOME]);
-			_screenManager.setScreen(ScreenType.GAME_INTERFACE);
+			_screenManager.setScreen(ScreenType.HOME);
+			
+			addEventListener(NavigationEvent.GOTO_SCREEN, gotoScreen);
+		}
+		
+		private function gotoScreen(e:NavigationEvent):void
+		{
+			if (e.screenName == ScreenType.CINEMATICS) {
+				_screenManager.getCurrent().transiOut();
+			} else {
+				_screenManager.setScreen(e.screenName);
+			}
 		}
 		
 		/* INTERFACE fr.citygame.un.view.IScreen */

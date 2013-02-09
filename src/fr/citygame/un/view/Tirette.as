@@ -4,7 +4,10 @@ package fr.citygame.un.view
 	import flash.geom.Point;
 	import fr.citygame.un.assets.Assets;
 	import fr.citygame.un.data.Data;
+	import fr.citygame.un.events.AppEvent;
+	import fr.citygame.un.events.NavigationEvent;
 	import fr.citygame.un.model.Config;
+	import fr.citygame.un.model.ScreenType;
 	import fr.citygame.un.utils.SendReceive;
 	import starling.core.Starling;
 	import starling.display.Image;
@@ -44,7 +47,9 @@ package fr.citygame.un.view
 			_fleche.y = -_fleche.height;
 			
 			_tirette = new Image(Texture.fromBitmap(new Assets.TIRETTE_BT()));
+			_tirette.touchable = true;
 			addChild(_tirette);
+			_tirette.scaleX = _tirette.scaleY = 2;
 			_tirette.x = -_tirette.width * .5;
 			_startY = -_tirette.height * .5;
 			_tirette.y = _startY;
@@ -52,17 +57,23 @@ package fr.citygame.un.view
 		
 		public function activateTirette():void
 		{
-			Starling.current.stage.addEventListener(TouchEvent.TOUCH, _touchHandler);
+			trace("activetteTirette()");
+			_tirette.addEventListener(TouchEvent.TOUCH, _touchHandler);
 		}
 		
 		public function deactivateTirette():void
 		{
-			Starling.current.stage.removeEventListener(TouchEvent.TOUCH, _touchHandler);
+			trace("deactivetteTirette()");
+			_tirette.removeEventListener(TouchEvent.TOUCH, _touchHandler);
 		}
 		
 		private function _touchHandler(e:TouchEvent):void 
 		{
-			_touch = e.getTouch(this);
+			trace("TIRETTE : " + e);
+			
+			_touch = e.getTouch(_tirette);
+			
+			trace("TOUCH :: " + _touch);
 			
 			if(_touch){
 			
@@ -75,12 +86,17 @@ package fr.citygame.un.view
 					case TouchPhase.MOVED :
 						_distance = _startTouchY - _touch.globalY;
 						_tirette.y = _startY - _distance > _startY ? _startY - _distance : _tirette.y;
-						_fleche.y = -_tirette.y -_fleche.height;
+						_fleche.y = -_tirette.y -_fleche.height*2;
 						break;
 						
 					case TouchPhase.ENDED :
 						deactivateTirette();
-						TweenNano.to(_tirette, 0.2, { y: _startY } );
+						TweenNano.to(_tirette, 0.2, { y: _startY, onComplete:
+								function():void
+								{
+									dispatchEvent(new AppEvent(AppEvent.PLAYER_SHOOTED, true));
+								}
+						} );
 						SendReceive.getInstance().sendShot(1, 1, Data.rotation, _distance);
 						break;
 					
