@@ -7,6 +7,7 @@ package fr.citygame.un.view
 	import fr.citygame.un.data.Data;
 	import fr.citygame.un.events.AppEvent;
 	import fr.citygame.un.model.Config;
+	import fr.citygame.un.utils.SendReceive;
 	import starling.display.Quad;
 	import starling.display.Sprite;
 	

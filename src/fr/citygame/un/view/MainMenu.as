@@ -2,10 +2,12 @@ package fr.citygame.un.view
 {
 	import com.greensock.TweenNano;
 	import com.jonlucas.controller.ScreenManager;
+	import flash.events.Event;
 	import fr.citygame.un.assets.Assets;
 	import fr.citygame.un.events.NavigationEvent;
 	import fr.citygame.un.model.Config;
 	import fr.citygame.un.model.ScreenType;
+	import fr.citygame.un.utils.SendReceive;
 	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.events.Touch;
@@ -24,9 +26,14 @@ package fr.citygame.un.view
 		private var _touch:Touch;
 		
 		public function MainMenu() 
-		{
+		{			
 			_screen = new Image(Texture.fromBitmap(new Assets.LOG_SCREEN()));
 			addChild(_screen);
+		}
+		
+		private function onInitComplete(e:Event):void 
+		{
+			dispatchEvent(new NavigationEvent(NavigationEvent.GOTO_SCREEN, ScreenType.GAME_INTERFACE, true, true));
 		}
 		
 		/* INTERFACE fr.citygame.un.view.IScreen */
@@ -54,7 +61,9 @@ package fr.citygame.un.view
 		
 		public function addListeners():void 
 		{
-			_screen.addEventListener(TouchEvent.TOUCH, _touchHandler);
+			//_screen.addEventListener(TouchEvent.TOUCH, _touchHandler);
+			SendReceive.getInstance().createPlayer("pseudo");
+			SendReceive.getInstance().addEventListener(Event.COMPLETE, onInitComplete);
 		}
 		
 		private function _touchHandler(e:TouchEvent):void 

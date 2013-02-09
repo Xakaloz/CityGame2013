@@ -27,10 +27,12 @@ package fr.citygame.un.view
 		
 		private var _map:Map;
 		private var _gpsUtils:GeolocUtils;
-		private var _localisationVo:LocalisationVO;
 		
 		private var _player:Player;
 		private var _tabPlayers:Vector.<Player>;
+		
+		private var _impact:Impact;
+		private var _tabImpacts:Vector.<Impact>;
 		
 		private var _count:uint;
 		
@@ -41,18 +43,24 @@ package fr.citygame.un.view
 		{
 			alpha = 0;
 			
-			scaleX *= 1;
-			scaleY *= 1;
+			scaleX *= .5;
+			scaleY *= .5;
 			
 			_tabPlayers = new Vector.<Player>();
 			
-			_localisationVo = new LocalisationVO(0, 0, 0, 0);
-			_localisationVo.setGeolocValues(47.205555, -1.566658);
+			_tabImpacts = new Vector.<Impact>();
 			
-			updatePosition(_localisationVo.x, _localisationVo.y);
+			Data.playerVo.localisation = new LocalisationVO(0, 0, 0, 0);
+			Data.playerVo.localisation.setGeolocValues(47.205555, -1.566658);
+			
+			updatePosition(Data.playerVo.localisation.x, Data.playerVo.localisation.y);
 			
 			_map = new Map();
 			addChild(_map);	
+			
+			this.rotation = deg2rad(90);
+			
+			Data.rotation = this.rotation;
 			
 			/*_compassUtils = new CompassUtils();
 			
@@ -67,13 +75,13 @@ package fr.citygame.un.view
 		private function onGpsUpdate(e:GpsEvent):void 
 		{
 			trace("UDPATE GPS");
-			//_localisationVo = new LocalisationVO(0, 0, 0, 0);
-			//_localisationVo.setGeolocValues(47.204979, -1.563289);
-			//_localisationVo.setGeolocValues(47.205898,-1.567731);
+			//Data.playerVo.localisation = new LocalisationVO(0, 0, 0, 0);
+			//Data.playerVo.localisation.setGeolocValues(47.204979, -1.563289);
+			//Data.playerVo.localisation.setGeolocValues(47.205898,-1.567731);
 			
-			_localisationVo.setGeolocValues(e.latitude, e.longitude);
+			Data.playerVo.localisation.setGeolocValues(e.latitude, e.longitude);
 			
-			updatePosition(_localisationVo.x, _localisationVo.y);
+			updatePosition(Data.playerVo.localisation.x, Data.playerVo.localisation.y);
 		}
 		
 		private function updatePosition(x:Number, y:Number):void
@@ -121,7 +129,25 @@ package fr.citygame.un.view
 				}
 			}
 			
+			temp = _tabImpacts.length;
+			for (i = 0; i < temp; i++)
+			{
+				removeChild(_tabImpacts[i]);
+			}
+
+			if (Data.impactsVo){			
+				while(Data.impactsVo.length > 0){
+					_impact = new Impact(Data.impactsVo[0]);
+					addChild(_impact);
+					
+					Data.impactsVo.shift();
+					
+					_tabImpacts.push(_impact);
+				}
+			}
+
 			if (_count == Config.REFRESH_PLAYERS_DELAY) {
+				SendReceive.getInstance().sendPlayerMove();
 				SendReceive.getInstance().getJoueurs();
 				_count = 0;
 			}
@@ -176,6 +202,11 @@ package fr.citygame.un.view
 		{
 			x = Config.stageWidth * .5;
 			y = Config.playerYposition;
+		}
+		
+		public function receiveImpacts():void 
+		{
+			SendReceive.getInstance().getImpacts();
 		}
 	}
 

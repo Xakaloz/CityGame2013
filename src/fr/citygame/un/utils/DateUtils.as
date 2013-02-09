@@ -14,9 +14,7 @@ package fr.citygame.un.utils
 			minutes = value > 60 ? Math.round(value / 60) : 0;
 			secondes = value % 60;
 			
-			trace(value, minutes, secondes);
-			
-			return minutes + " : " + secondes;
+			return (minutes < 10 ? 0 + "" + minutes : minutes) + ":" + (secondes < 10 ? 0 + "" + secondes : secondes);
 		}
 		
 	}

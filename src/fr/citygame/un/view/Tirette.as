@@ -69,11 +69,11 @@ package fr.citygame.un.view
 		
 		private function _touchHandler(e:TouchEvent):void 
 		{
-			trace("TIRETTE : " + e);
+			//trace("TIRETTE : " + e);
 			
 			_touch = e.getTouch(_tirette);
 			
-			trace("TOUCH :: " + _touch);
+			//trace("TOUCH :: " + _touch);
 			
 			if(_touch){
 			

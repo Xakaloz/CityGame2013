@@ -1,6 +1,7 @@
 package fr.citygame.un.utils 
 {
 	import flash.events.Event;
+	import flash.events.EventDispatcher;
 	import flash.events.HTTPStatusEvent;
 	import flash.events.IEventDispatcher;
 	import flash.events.IOErrorEvent;
@@ -11,19 +12,22 @@ package fr.citygame.un.utils
 	import flash.net.URLRequest;
 	import flash.net.URLRequestMethod;
 	import flash.net.URLVariables;
+	import fr.citygame.un.data.Data;
 	import fr.citygame.un.data.DataParser;
 	import fr.citygame.un.model.Config;
 	import fr.citygame.un.model.LocalisationVO;
+	import starling.utils.rad2deg;
 	
 	/**
 	 * ...
 	 * @author Jon Lucas
 	 */
-	public class SendReceive 
+	public class SendReceive extends EventDispatcher
 	{		
 		private var _loader						:URLLoader;
 		private var _loaderJoueurs				:URLLoader;
 		private var _loaderImpacts				:URLLoader;
+		private var _loaderPseudo				:URLLoader;
 		private var _urlVars					:URLVariables;
 		private var _request					:URLRequest;
 		
@@ -76,6 +80,18 @@ package fr.citygame.un.utils
             }
 		}
 		
+		public function createPlayer(pPseudo:String):void
+		{
+			_urlVars = new URLVariables();
+			_urlVars.pseudo = pPseudo;
+			
+			_request = new URLRequest(Config.URL + "creationJoueur");
+			_request.data = _urlVars;
+			_request.method = URLRequestMethod.POST;
+			
+			_send(_loaderPseudo, _request, "Pseudo");  
+        }
+		
 		public function getJoueurs():void
 		{
 			_request = new URLRequest(Config.URL + "getJoueurs");
@@ -92,12 +108,13 @@ package fr.citygame.un.utils
 			_send(_loaderImpacts, _request, "Impacts");
         }
 		
-		public function sendPlayerMove(pIdPlayer:uint, pLocalisation:LocalisationVO):void
+		public function sendPlayerMove():void
 		{
 			_urlVars = new URLVariables();
-			_urlVars.id_joueur = 1;
-			_urlVars.latitude = pLocalisation.x;
-			_urlVars.longitude = pLocalisation.y;
+			_urlVars.id_joueur = Data.playerVo.id;
+			_urlVars.latitude = Data.playerVo.localisation.latitude;
+			_urlVars.longitude = Data.playerVo.localisation.longitude;
+			_urlVars.direction = rad2deg(Data.rotation);
 			
             _request = new URLRequest(Config.URL + "deplacement");
 			_request.data = _urlVars;
@@ -111,7 +128,8 @@ package fr.citygame.un.utils
 			_urlVars = new URLVariables();
 			_urlVars.id_joueur = pIdPlayer;
 			_urlVars.id_arme = pIdWeapon;
-			_urlVars.direction = pDirection;
+			trace(pDirection, rad2deg(pDirection));
+			_urlVars.direction = rad2deg(pDirection);
 			_urlVars.puissance = pPuissance;
 			
             _request = new URLRequest(Config.URL + "tir");
@@ -131,18 +149,20 @@ package fr.citygame.un.utils
         }
  
         private function completeHandler(event:Event):void {
-            trace("completeHandler: " + event.currentTarget.data);
+            //trace("completeHandler: " + event.currentTarget.data);
 			
 			switch(URLLoader(event.currentTarget).dataFormat)
 			{
 				case "Joueurs":
-					trace("JOUEURS");
 					parser.parseJoueurs(XML(event.currentTarget.data));
-					
 					break;
-				case "":
-					trace("LOADER");
+				case "Impacts":
+					trace("completeHandler: " + event.currentTarget.data);
 					parser.parseImpacts(XML(event.currentTarget.data));
+					break;
+				case "Pseudo":
+					parser.parseCreatePlayer(XML(event.currentTarget.data));
+					dispatchEvent(new Event(Event.COMPLETE));
 					break;
 			}
 			

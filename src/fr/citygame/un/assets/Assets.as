@@ -1,6 +1,7 @@
 package fr.citygame.un.assets 
 {
 	import starling.textures.Texture;
+	import starling.textures.TextureAtlas;
 	
 	/**
 	 * ...
@@ -33,10 +34,18 @@ package fr.citygame.un.assets
 		[Embed(source = "../../../../../bin/assets/images/tiretteRuller.png")]
 		public static const TIRETTE_RULLER:Class;
 		
-		[Embed(source = "../../../../../bin/assets/images/tiretteRuller.png")]
-		public static const IMPACT:Class;
+		//////////////// NEW
 		
-		public static var textureImpact:Texture = Texture.fromBitmap(new IMPACT());
+		[Embed(source="../../../../../bin/assets/images/explosions.png")]
+		public static const SPRITE_SHEET_IMPACT:Class;
+		
+		public static var textureImpact:Texture = Texture.fromBitmap(new SPRITE_SHEET_IMPACT());
+		
+		[Embed(source="../../../../../bin/assets/xml/explosions.xml", mimeType = "application/octet-stream")]
+		public static const SPRITE_SHEET_XML:Class;
+		
+		public static var xml:XML = XML(new Assets.SPRITE_SHEET_XML());
+		public static var impactTextureAltas:TextureAtlas = new TextureAtlas(textureImpact, xml);
 		
 		[Embed(source="../../../../../bin/assets/images/pictosJoueurs.png")]
 		public static const PICTO_MONKEY:Class;
@@ -45,6 +54,7 @@ package fr.citygame.un.assets
 		
 		[Embed(source="../../../../../bin/assets/images/pictosJoueursEl.png")]
 		public static const PICTO_ELEPHANT:Class;
+		
 		
 		public static var textureElephant:Texture = Texture.fromBitmap(new PICTO_ELEPHANT());
 	}

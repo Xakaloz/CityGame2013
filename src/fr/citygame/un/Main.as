@@ -67,12 +67,6 @@ package fr.citygame.un
 			
 			addEventListener(NavigationEvent.GOTO_SCREEN, _gotoScreenHandler);
 			
-			//setTimeout(_stopStarling, 10000);			
-			
-			//setTimeout(function():void { _starling.viewPort = new Rectangle(-32, -32, 32, 32); }, 2000);
-			
-			//SendReceive.getInstance().getJoueurs();
-			
 			/*var vb:Vibration = new Vibration();
 			vb.vibrate(500);*/
 		}

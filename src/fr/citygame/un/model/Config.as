@@ -11,7 +11,7 @@ package fr.citygame.un.model
 	public class Config 
 	{
 		
-		public static const URL				:String = "http://mobile.city-game.deneb4/air/"; // "http://addn.cleverapps.io/air/";
+		public static const URL				:String = "http://city-game.appus.fr/air/";
 		
 		// Temps en millisecondes du timer principal.
 		public static const TIMER_DELAY			:uint = 1000;

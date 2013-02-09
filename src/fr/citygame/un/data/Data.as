@@ -13,6 +13,7 @@ package fr.citygame.un.data
 		public static var playersVo:Vector.<PlayerVO>;
 		public static var impactsVo:Vector.<ImpactVO>;
 		public static var gameVo:GameVO;
+		public static var playerVo:PlayerVO = new PlayerVO(0,"",0,null,null,0);
 	}
 
 }

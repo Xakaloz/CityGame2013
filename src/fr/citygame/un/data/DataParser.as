@@ -2,6 +2,7 @@ package fr.citygame.un.data
 {
 	import flash.events.EventDispatcher;
 	import fr.citygame.un.model.GameVO;
+	import fr.citygame.un.model.ImpactVO;
 	import fr.citygame.un.model.LocalisationVO;
 	import fr.citygame.un.model.PlayerVO;
 	
@@ -14,12 +15,16 @@ package fr.citygame.un.data
 		
 		private var xmlListeEquipe:XMLList;
 		private var xmlListeJoueur:XMLList;
+		private var xmlListe:XMLList;
+		
 		private var itemEquipe:XML;
 		private var itemJoueur:XML;
+		private var item:XML;
 		
 		private var localisationVo:LocalisationVO;
 		
 		private var playerVO:PlayerVO;
+		private var impactVO:ImpactVO;
 		
 		public function DataParser()
 		{
@@ -55,7 +60,23 @@ package fr.citygame.un.data
 		
 		public function parseImpacts(xml:XML):void 
 		{
+			Data.impactsVo = new Vector.<ImpactVO>();
 			
+			xmlListe = xml.impacts;
+			
+			//for each(item in xmlListe)
+			for each (var i:XML in xml..impact)
+			{
+				localisationVo = new LocalisationVO(i.latitude, i.longitude, 0, 0);
+				impactVO = new ImpactVO(i.@id, 0, localisationVo, i.rayon);
+				
+				Data.impactsVo.push(impactVO);
+			}
+		}
+		
+		public function parseCreatePlayer(xml:XML):void 
+		{
+			Data.playerVo = new PlayerVO(xml.id, xml.pseudo, xml.idTeam, null, Data.playerVo.localisation, 0, null);
 		}
 		
 	}
