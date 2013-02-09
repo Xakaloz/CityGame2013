@@ -46,8 +46,6 @@ package fr.citygame.un.utils
 		
 		public function initGame(pPseudo:String):void
 		{
-			
-			
 			_urlVars = new URLVariables();
 			_urlVars.pseudo = pPseudo;
 			
@@ -56,7 +54,6 @@ package fr.citygame.un.utils
 			_request.method = URLRequestMethod.POST;
 			
 			_send(_loader, _request);
-           
         }
 		
 		private function _send(loader:URLLoader, pRequest:URLRequest, name:String = ""):void 

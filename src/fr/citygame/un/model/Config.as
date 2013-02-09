@@ -11,9 +11,13 @@ package fr.citygame.un.model
 	public class Config 
 	{
 		
-		public static const URL				:String = "http://addn.cleverapps.io/air/";
+		public static const URL				:String = "http://mobile.city-game.deneb4/air/"; // "http://addn.cleverapps.io/air/";
 		
-		public static const DELAY			:uint = 1000;
+		// Temps en millisecondes du timer principal.
+		public static const TIMER_DELAY			:uint = 1000;
+		
+		// Temps de raffraîchissement en secondes des requêtes au serveur.
+		public static const REFRESH_PLAYERS_DELAY			:uint = 3;
 		
 		public static var stageWidth		:Number;
 		public static var stageHeight		:Number;

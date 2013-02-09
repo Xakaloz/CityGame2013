@@ -28,15 +28,19 @@ package fr.citygame.un.view
 		private var _map:Map;
 		private var _gpsUtils:GeolocUtils;
 		private var _localisationVo:LocalisationVO;
-		private var _timer:Timer;
+		
 		private var _player:Player;
 		private var _tabPlayers:Vector.<Player>;
+		
+		private var _count:uint;
 		
 		private var temp:int;
 		private var i:int;
 		
 		public function MapContainer() 
 		{
+			alpha = 0;
+			
 			scaleX *= 1;
 			scaleY *= 1;
 			
@@ -45,17 +49,15 @@ package fr.citygame.un.view
 			_localisationVo = new LocalisationVO(0, 0, 0, 0);
 			_localisationVo.setGeolocValues(47.205555, -1.566658);
 			
-			_timer = new Timer(Config.DELAY);
-			
 			updatePosition(_localisationVo.x, _localisationVo.y);
 			
 			_map = new Map();
 			addChild(_map);	
 			
-			_compassUtils = new CompassUtils();
+			/*_compassUtils = new CompassUtils();
 			
 			_gpsUtils = new GeolocUtils();
-			_gpsUtils.start();
+			_gpsUtils.start();*/
 			
 			//createPlayer(47.203541, -1.565986);
 			//createPlayer(47.204503,-1.568303);
@@ -97,8 +99,10 @@ package fr.citygame.un.view
 			//trace("pivot X : "+this.pivotX);
 		}
 			
-		private function onTick(e:TimerEvent = null):void 
+		public function onTick():void 
 		{
+			_count ++;
+			
 			temp = _tabPlayers.length;
 			for (i = 0; i < temp; i++)
 			{
@@ -117,7 +121,10 @@ package fr.citygame.un.view
 				}
 			}
 			
-			SendReceive.getInstance().getJoueurs();
+			if (_count == Config.REFRESH_PLAYERS_DELAY) {
+				SendReceive.getInstance().getJoueurs();
+				_count = 0;
+			}
 			
 		}
 		
@@ -136,23 +143,18 @@ package fr.citygame.un.view
 		
 		public function transiIn(params:Object = null):void 
 		{
-			//TweenNano.to(this, 0.2, { alpha : 1 } );
-			
 			trace("transiIn()");
 			
 			alpha = 0;
 			
 			TweenNano.to(this, .5, { alpha: 1 } );
 			
-			onTick();
-			
-			_timer.start();
+			_count = 0;
 			addListeners();
 		}
 		
 		public function transiOut():void 
 		{
-			_timer.reset();
 			removeListeners();
 			
 			TweenNano.to(this, 0.5, { alpha : 0 } );
@@ -160,18 +162,14 @@ package fr.citygame.un.view
 		
 		public function addListeners():void 
 		{
-			_gpsUtils.addEventListener(GpsEvent.UPDATE, onGpsUpdate);
-			_compassUtils.addEventListener(CompassEvent.UPDATE, onCompassUpdate);
-			
-			_timer.addEventListener(TimerEvent.TIMER, onTick);
+			/*_gpsUtils.addEventListener(GpsEvent.UPDATE, onGpsUpdate);
+			_compassUtils.addEventListener(CompassEvent.UPDATE, onCompassUpdate);*/
 		}
 		
 		public function removeListeners():void 
 		{
-			_gpsUtils.removeEventListener(GpsEvent.UPDATE, onGpsUpdate);
-			_compassUtils.removeEventListener(CompassEvent.UPDATE, onCompassUpdate);
-			
-			_timer.removeEventListener(TimerEvent.TIMER, onTick);
+			/*_gpsUtils.removeEventListener(GpsEvent.UPDATE, onGpsUpdate);
+			_compassUtils.removeEventListener(CompassEvent.UPDATE, onCompassUpdate);*/
 		}
 		
 		public function initPosition():void 

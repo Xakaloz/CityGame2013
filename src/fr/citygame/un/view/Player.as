@@ -17,7 +17,7 @@ package fr.citygame.un.view
 		{
 			_playerVo = playerVo;
 			
-			this.scaleX = scaleY = 0.75;
+			//this.scaleX = scaleY = 0.75;
 			
 			var _image:Image;
 			

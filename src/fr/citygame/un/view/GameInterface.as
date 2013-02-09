@@ -1,7 +1,10 @@
 package fr.citygame.un.view 
 {
 	import com.greensock.TweenNano;
+	import flash.events.TimerEvent;
 	import flash.events.TouchEvent;
+	import flash.utils.Timer;
+	import fr.citygame.un.data.Data;
 	import fr.citygame.un.events.AppEvent;
 	import fr.citygame.un.model.Config;
 	import starling.display.Quad;
@@ -16,15 +19,31 @@ package fr.citygame.un.view
 		private var _map:MapContainer;
 		private var _tirette:Tirette;
 		
+		private var _timers:Timers;
+		
+		private var _timer:Timer;
 		private var _filtre:Quad;
 		
 		public function GameInterface() 
 		{
 			Config.playerYposition = Config.stageHeight * 2 / 3;
 			
+			_timer = new Timer(Config.TIMER_DELAY);
+			
 			_map = new MapContainer();
 			_map.initPosition();
 			addChild(_map);
+			
+			_timers = new Timers();
+			_timers.y = 50;
+			addChild(_timers);
+		}
+		
+		public function onTick(event:TimerEvent = null):void 
+		{
+			_map.onTick();
+			
+			_timers.onTick();
 		}
 		
 		private function _activateFireMode():void
@@ -64,11 +83,14 @@ package fr.citygame.un.view
 		{
 			this.alpha = 0;
 			x = Config.stageWidth;
-			_map.transiIn();
 			
 			TweenNano.to(this, .5, { alpha: 1, x: 0, onComplete:
 				function():void {
+					_map.transiIn();
 					addListeners();
+					// Déclenche le onTick avavnt de lancer le compeur pour récupérer les joueurs au démarrage.
+					onTick();
+					_timer.start();
 				}
 			} );
 		}
@@ -79,16 +101,22 @@ package fr.citygame.un.view
 			
 			removeListeners();
 			
+			_timer.reset();
+			
 			_map.transiOut();
 		}
 		
 		public function addListeners():void 
 		{
+			_timer.addEventListener(TimerEvent.TIMER, onTick);
+			
 			_activateFireMode();
 		}
 		
 		public function removeListeners():void 
 		{
+			_timer.removeEventListener(TimerEvent.TIMER, onTick);
+			
 			_deactivateFireMode();
 		}
 

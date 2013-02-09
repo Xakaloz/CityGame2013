@@ -90,14 +90,16 @@ package fr.citygame.un.view
 						break;
 						
 					case TouchPhase.ENDED :
-						deactivateTirette();
-						TweenNano.to(_tirette, 0.2, { y: _startY, onComplete:
-								function():void
-								{
-									dispatchEvent(new AppEvent(AppEvent.PLAYER_SHOOTED, true));
-								}
-						} );
-						SendReceive.getInstance().sendShot(1, 1, Data.rotation, _distance);
+						if(_tirette.y > _startY + 5){
+							deactivateTirette();
+							TweenNano.to(_tirette, 0.2, { y: _startY, onComplete:
+									function():void
+									{
+										dispatchEvent(new AppEvent(AppEvent.PLAYER_SHOOTED, true));
+									}
+							} );
+							SendReceive.getInstance().sendShot(1, 1, Data.rotation, _distance);
+						}
 						break;
 					
 				}
