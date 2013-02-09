@@ -1,5 +1,6 @@
 package fr.citygame.un.utils 
 {
+	import fr.citygame.un.model.LocalisationVO;
 	/**
 	 * ...
 	 * @author Jon Lucas
@@ -7,7 +8,10 @@ package fr.citygame.un.utils
 	public class GeolocUtils 
 	{
 		
-		public static function convertGeolocToXY();
+		public static function convertGeolocToXY(pLocalisationVO:LocalisationVO):LocalisationVO
+		{
+			return new LocalisationVO(0,0,0,0);
+		}
 		
 	}
 

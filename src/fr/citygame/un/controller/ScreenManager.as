@@ -1,8 +1,5 @@
 package fr.citygame.un.controller
 {
-	
-
-	import flash.display.Sprite;
 	import fr.citygame.un.view.IScreen;
 	
 	
@@ -17,13 +14,13 @@ package fr.citygame.un.controller
 		
 		private var _screens:Object;
 		
-		private var _view:Sprite;
+		private var _view:*;
 		
 		/**
 		 * 
 		 * @param	view
 		 */
-		public function ScreenManager(view:Sprite)
+		public function ScreenManager(view:*)
 		{
 			_view = view;
 			

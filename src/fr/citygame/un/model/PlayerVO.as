@@ -16,25 +16,22 @@ package fr.citygame.un.model
 		
 		private var _idWeapons	:Vector.<uint>;
 		
-		private var _latitude	:Number;
-		
-		private var _longitude	:Number;
+		private var _localisation	:LocalisationVO;
 		
 		private var _avatar		:BitmapData;
 		
 		private var _life		:Number;
 		
 		
-		public function PlayerVO(pID:uint, pPseudo:String, pIdTeam:uint, pIdWeapons:Vector.<uint>, pLatitude:Number, pLongitude:Number, pLife:Number, pAvatar:BitmapData = null)
+		public function PlayerVO(pID:uint, pPseudo:String, pIdTeam:uint, pIdWeapons:Vector.<uint>, pLocalisation:LocalisationVO, pLife:Number, pAvatar:BitmapData = null)
 		{
-			_id = pID;
-			_pseudo = pPseudo;
-			_idTeam = pIdTeam;
-			_idWeapons = pIdWeapons;
-			_latitude = pLatitude;
-			_longitude = pLongitude;
-			_avatar = pAvatar;
-			_life = pLife;
+			id = pID;
+			pseudo = pPseudo;
+			idTeam = pIdTeam;
+			idWeapons = pIdWeapons;
+			localisation = pLocalisation;
+			avatar = pAvatar;
+			life = pLife;
 		}
 		
 		public function get id():uint 
@@ -77,26 +74,6 @@ package fr.citygame.un.model
 			_idWeapons = value;
 		}
 		
-		public function get latitude():Number 
-		{
-			return _latitude;
-		}
-		
-		public function set latitude(value:Number):void 
-		{
-			_latitude = value;
-		}
-		
-		public function get longitude():Number 
-		{
-			return _longitude;
-		}
-		
-		public function set longitude(value:Number):void 
-		{
-			_longitude = value;
-		}
-		
 		public function get avatar():BitmapData 
 		{
 			return _avatar;
@@ -115,6 +92,16 @@ package fr.citygame.un.model
 		public function set life(value:Number):void 
 		{
 			_life = value;
+		}
+		
+		public function get localisation():LocalisationVO 
+		{
+			return _localisation;
+		}
+		
+		public function set localisation(value:LocalisationVO):void 
+		{
+			_localisation = value;
 		}
 		
 	}

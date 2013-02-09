@@ -1,9 +1,9 @@
 package fr.citygame.un.view 
 {
-	import flash.events.Event;
 	import fr.citygame.un.controller.ScreenManager;
 	import fr.citygame.un.model.ScreenType;
 	import starling.display.Sprite;
+	import starling.events.Event;
 	
 	/**
 	 * ...
@@ -23,13 +23,13 @@ package fr.citygame.un.view
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 			
 			_screenManager = new ScreenManager(this);
-			_screenManager.addScreen(ScreenType.HOME, 				new Home(), 	null);
-			_screenManager.addScreen(ScreenType.MAIN_MENU, 			new Home(), 	null);
-			_screenManager.addScreen(ScreenType.GAME_INTERFACE, 	new Home(), 	null);
-			_screenManager.addScreen(ScreenType.CINEMATICS, 		new Home(), 	null);
-			_screenManager.addScreen(ScreenType.SCORES, 			new Home(), 	null);
-			_screenManager.addScreen(ScreenType.CREDITS, 			new Home(), 	null);
-			_screenManager.setScreen(ScreenType.HOME);
+			_screenManager.addScreen(ScreenType.HOME, 				new Home(), 			[ScreenType.MAIN_MENU, ScreenType.CINEMATICS]);
+			_screenManager.addScreen(ScreenType.MAIN_MENU, 			new Home(), 			[ScreenType.GAME_INTERFACE]);
+			_screenManager.addScreen(ScreenType.GAME_INTERFACE, 	new GameInterface(), 	[ScreenType.CINEMATICS, ScreenType.SCORES]);
+			_screenManager.addScreen(ScreenType.CINEMATICS, 		new Home(), 			[ScreenType.MAIN_MENU, ScreenType.GAME_INTERFACE, ScreenType.CREDITS, ScreenType.SCORES]);
+			_screenManager.addScreen(ScreenType.SCORES, 			new Home(), 			[ScreenType.CREDITS]);
+			_screenManager.addScreen(ScreenType.CREDITS, 			new Home(), 			[ScreenType.HOME]);
+			_screenManager.setScreen(ScreenType.GAME_INTERFACE);
 		}
 		
 		/* INTERFACE fr.citygame.un.view.IScreen */

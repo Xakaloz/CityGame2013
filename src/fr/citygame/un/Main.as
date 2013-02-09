@@ -1,5 +1,6 @@
 package fr.citygame.un
 {
+	import com.adobe.nativeExtensions.Vibration;
 	import flash.desktop.NativeApplication;
 	import flash.events.Event;
 	import flash.display.Sprite;
@@ -8,6 +9,8 @@ package fr.citygame.un
 	import flash.ui.Multitouch;
 	import flash.ui.MultitouchInputMode;
 	import fr.citygame.un.controller.ScreenManager;
+	import fr.citygame.un.model.LocalisationVO;
+	import fr.citygame.un.utils.SendReceive;
 	import fr.citygame.un.view.Game;
 	import starling.core.Starling;
 	
@@ -15,9 +18,9 @@ package fr.citygame.un
 	 * ...
 	 * @author Jon Lucas
 	 */
+	[SWF(frameRate="60")]
 	public class Main extends Sprite 
 	{
-		
 		private var _starling:Starling;
 		
 		public function Main():void 
@@ -34,6 +37,13 @@ package fr.citygame.un
 			_starling.showStats = true;
 			// set anti-aliasing (higher the better quality but slower performance)
 			_starling.antiAliasing = 1;
+			
+			_starling.start();
+			
+			//SendReceive.getInstance().getJoueurs();
+			
+			/*var vb:Vibration = new Vibration();
+			vb.vibrate(500);*/
 		}
 		
 		private function deactivate(e:Event):void 

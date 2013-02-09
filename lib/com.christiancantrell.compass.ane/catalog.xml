@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding ="utf-8"?>
+<swc xmlns="http://www.adobe.com/flash/swccatalog/9">
+  <versions>
+    <swc version="1.2" />
+    <flex version="4.5.1" build="21328" minimumSupportedVersion="3.0.0" />
+  </versions>
+  <features>
+    <feature-script-deps />
+    <feature-files />
+  </features>
+  <libraries>
+    <library path="library.swf">
+      <script name="_d15bef6ec18f38e8820616610f8079cbed97b5b7c5c1e1e6fa91fb5362eba236_flash_display_Sprite" mod="1319720801930" signatureChecksum="621247337" >
+        <def id="_d15bef6ec18f38e8820616610f8079cbed97b5b7c5c1e1e6fa91fb5362eba236_flash_display_Sprite" /> 
+        <dep id="flash.system:Security" type="e" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="flash.display:Sprite" type="i" /> 
+      </script>
+      <script name="com/christiancantrell/extensions/Compass" mod="1317205886000" signatureChecksum="1579969655" >
+        <def id="com.christiancantrell.extensions:Compass" /> 
+        <dep id="flash.events:StatusEvent" type="e" /> 
+        <dep id="flash.external:ExtensionContext" type="e" /> 
+        <dep id="flash.events:IEventDispatcher" type="s" /> 
+        <dep id="flash.events:StatusEvent" type="s" /> 
+        <dep id="flash.external:ExtensionContext" type="s" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="flash.events:EventDispatcher" type="i" /> 
+      </script>
+      <digests>
+        <digest type="SHA-256" signed="false" value="de83ab437bbcd20ff20d2476eaaeeeddf09a34efd3d3a11c6eec33f52b52d44c"   />
+      </digests>
+    </library>
+  </libraries>
+  <files>
+  </files>
+</swc>

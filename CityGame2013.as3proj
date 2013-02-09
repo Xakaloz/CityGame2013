@@ -16,6 +16,7 @@
   <!-- Other classes to be compiled into your SWF -->
   <classpaths>
     <class path="src" />
+    <class path="lib" />
   </classpaths>
   <!-- Build options -->
   <build>
@@ -51,6 +52,10 @@
   <!-- SWC Libraries -->
   <libraryPaths>
     <element path="lib\starling.swc" />
+    <element path="lib\jonlucas.air.swc" />
+    <element path="lib\greensock.swc" />
+    <element path="lib\CompassExtension.swc" />
+    <element path="lib\VibrationActionScriptLibrary.swc" />
   </libraryPaths>
   <!-- External Libraries -->
   <externalLibraryPaths>

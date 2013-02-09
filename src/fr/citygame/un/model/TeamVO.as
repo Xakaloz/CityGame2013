@@ -17,13 +17,13 @@ package fr.citygame.un.model
 		
 		public function TeamVO(pId:uint, pName:String, pColor:Number, pScore:Number) 
 		{
-			_id = pId;
+			id = pId;
 			
-			_name = pName;
+			name = pName;
 			
-			_color = pColor;
+			color = pColor;
 			
-			_score = pScore;
+			score = pScore;
 		}
 		
 		public function get id():uint 
