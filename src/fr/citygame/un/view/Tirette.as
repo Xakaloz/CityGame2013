@@ -52,7 +52,7 @@ package fr.citygame.un.view
 			_tirette = new Image(Texture.fromBitmap(new Assets.TIRETTE_BT()));
 			_tirette.touchable = true;
 			addChild(_tirette);
-			_tirette.scaleX = _tirette.scaleY = 2;
+			//_tirette.scaleX = _tirette.scaleY = 2;
 			_tirette.x = -_tirette.width * .5;
 			_startY = -_tirette.height * .5;
 			_tirette.y = _startY;
@@ -101,7 +101,7 @@ package fr.citygame.un.view
 										dispatchEvent(new AppEvent(AppEvent.PLAYER_SHOOTED, true));
 									}
 							} );
-							SendReceive.getInstance().sendShot(1, 1, Data.rotation, _distance);
+							SendReceive.getInstance().sendShot(1, 1, Data.rotation, Math.abs(_distance)*Config.power);
 							/*var point:Object = Trigonometrie.calculCoordonneesPointSurCercle(Data.playerVo.localisation.x, Data.playerVo.localisation.y, _distance, 180, 360);
 							trace(Data.playerVo.localisation.x, Data.playerVo.localisation.y, point.x, point.y);
 							Data.impactsVo = new Vector.<ImpactVO>();

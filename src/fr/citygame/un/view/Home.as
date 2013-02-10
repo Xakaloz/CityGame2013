@@ -3,11 +3,10 @@ package fr.citygame.un.view
 	import com.greensock.TweenNano;
 	import com.jonlucas.controller.ScreenManager;
 	import fr.citygame.un.assets.Assets;
-	import fr.citygame.un.data.Data;
 	import fr.citygame.un.events.NavigationEvent;
 	import fr.citygame.un.model.Config;
-	import fr.citygame.un.model.PhasesDeJeu;
 	import fr.citygame.un.model.ScreenType;
+	import starling.display.Button;
 	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.events.Touch;
@@ -24,11 +23,21 @@ package fr.citygame.un.view
 		
 		private var _screen:Image;
 		private var _touch:Touch;
+		private var _btn:Button;
 		
 		public function Home() 
 		{
 			_screen = new Image(Texture.fromBitmap(new Assets.SPLASH_SCREEN));
 			addChild(_screen);
+			
+			_btn = new Button(Texture.fromBitmap(new Assets.BTN_DOWN),"", Texture.fromBitmap(new Assets.BTN_UP));
+			addChild(_btn);
+			
+			_btn.pivotX = _btn.width / 2;
+			_btn.pivotY = _btn.height / 2;
+			
+			_btn.x = Config.stageWidth * 0.5;
+			_btn.y = Config.stageHeight * 11 / 12;
 		}
 		
 		/* INTERFACE fr.citygame.un.view.IScreen */
@@ -56,7 +65,7 @@ package fr.citygame.un.view
 		
 		public function addListeners():void 
 		{
-			_screen.addEventListener(TouchEvent.TOUCH, _touchHandler);
+			_btn.addEventListener(TouchEvent.TOUCH, _touchHandler);
 		}
 		
 		private function _touchHandler(e:TouchEvent):void 
@@ -74,8 +83,6 @@ package fr.citygame.un.view
 						break;
 						
 					case TouchPhase.ENDED :
-						Data.phaseDeJeu = PhasesDeJeu.INTRO;
-						//dispatchEvent(new NavigationEvent(NavigationEvent.GOTO_SCREEN, ScreenType.CINEMATICS, true, true));
 						dispatchEvent(new NavigationEvent(NavigationEvent.GOTO_SCREEN, ScreenType.MAIN_MENU, true, true));
 						break;
 					
@@ -85,7 +92,7 @@ package fr.citygame.un.view
 		
 		public function removeListeners():void 
 		{
-			_screen.removeEventListener(TouchEvent.TOUCH, _touchHandler);
+			_btn.removeEventListener(TouchEvent.TOUCH, _touchHandler);
 		}
 		
 	}

@@ -41,6 +41,8 @@ package fr.citygame.un
 		
 		public function Main():void 
 		{
+			Config.STAGE = stage;
+			
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.align = StageAlign.TOP_LEFT;
 			stage.addEventListener(Event.DEACTIVATE, deactivate);

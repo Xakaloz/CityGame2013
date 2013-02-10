@@ -9,7 +9,7 @@ package fr.citygame.un.utils
 		static private var minutes:Number;
 		static private var secondes:Number;
 		
-		public static function convertSecondsToHMS(value:uint):String
+		public static function convertSecondsToHMS(value:Number):String
 		{			
 			minutes = value > 60 ? Math.round(value / 60) : 0;
 			secondes = value % 60;

@@ -78,7 +78,7 @@
                 private function onStageVideoAvailibility(event:StageVideoAvailabilityEvent):void
                 {                      
 					trace("VideoPlayer :: " + event.availability);
-					stage.removeEventListener(StageVideoAvailabilityEvent.STAGE_VIDEO_AVAILABILITY, onStageVideoAvailibility);
+					Config.STAGE.removeEventListener(StageVideoAvailabilityEvent.STAGE_VIDEO_AVAILABILITY, onStageVideoAvailibility);
 				   
 					if(Config.nc == null)   Config.nc = new NetConnection();
 				   
@@ -87,9 +87,9 @@
 					_nc.connect(null);
 				   
 					if(Config.ns == null){
-							Config.ns = new NetStream(_nc);
-							Config.ns.client = this;
-							//_model.ns.bufferTime = 5;
+						Config.ns = new NetStream(_nc);
+						Config.ns.client = this;
+						//_model.ns.bufferTime = 5;
 					}
 				   
 					_ns = Config.ns;
@@ -106,6 +106,7 @@
 						   
 							_myStageVideo = Config.stageVideo;
 							_myStageVideo.addEventListener( StageVideoEvent.RENDER_STATE, stageVideoStateChange );
+							_myStageVideo.viewPort =  new Rectangle(0, 0, Config.stageWidth, Config.stageHeight);
 					} else {
 							//use Video API for displaying the video
 							trace("VideoPlayer :: Video API");
@@ -145,7 +146,7 @@
                  */
                 private function resize(event:Event = null, fullfill:Boolean = true) : void
                 {
-					if(isNaN(_rapportStage)){
+					/*if(isNaN(_rapportStage)){
 						_rapportStage = _sWidth / _sHeight;
 					   
 						_vWidth = _sWidth;
@@ -157,18 +158,18 @@
 						// Calcul du décalage sur x et y pour que la vidéo soit toujours centrée.
 						_decX = (_sWidth - _vWidth) * .5;
 						_decY = (_sHeight - _vHeight) * .5;
-					}      
+					}  */    
                        
                         if (_myStageVideo) {
 							//trace(_decX, _decY, _vWidth, _vHeight);
-                            _myStageVideo.viewPort = new Rectangle(_decX, _decY, _vWidth, _vHeight);
+                            _myStageVideo.viewPort =  new Rectangle(0, 0, Config.stageWidth, Config.stageHeight);//new Rectangle(_decX, _decY, _vWidth, _vHeight);
                         }
                        
                         if(_myVideo){
-							_myVideo.x = _decX;
-							_myVideo.y = _decY;
-							_myVideo.width = _vWidth;
-							_myVideo.height = _vHeight;
+							_myVideo.x = 0; // _decX;
+							_myVideo.y = 0; // _decY;
+							_myVideo.width = Config.stageWidth;// _vWidth;
+							_myVideo.height = Config.stageHeight;// _vHeight;
                         }
                 }
                
@@ -177,7 +178,7 @@
                 {
                         trace("VideoPlayer :: onMetaData(" + meta.width + " " + meta.height + ")");
                         //_rapportVideo = meta.width / meta.height;
-                        if(_playing)    resize();
+                       if(_playing)    resize();
                 }
                
                
@@ -314,7 +315,7 @@
                         TweenNano.to(this, 0.5, { alpha:0, onComplete:
                                 function(_this:Cinematics):void
                                 {
-                                        parent.removeChild(_this);
+                                        if(parent)	parent.removeChild(_this);
                                 }
                                 , onCompleteParams: [this]
                         });
@@ -322,25 +323,25 @@
                
                 public function addListeners():void
                 {
-                        addEventListener(Event.REMOVED_FROM_STAGE, onRemove);
-                       
-                        stage.addEventListener(StageVideoAvailabilityEvent.STAGE_VIDEO_AVAILABILITY, onStageVideoAvailibility);
-                       
-                        //onStageVideoAvailibility(null);
+					addEventListener(Event.REMOVED_FROM_STAGE, onRemove);
+				   
+					Config.STAGE.addEventListener(StageVideoAvailabilityEvent.STAGE_VIDEO_AVAILABILITY, onStageVideoAvailibility);
+				   
+					//onStageVideoAvailibility(null);
                 }
                
                 public function removeListeners():void
                 {
-                        removeEventListener(Event.REMOVED_FROM_STAGE, onRemove);
-                       
-                        stage.removeEventListener(StageVideoAvailabilityEvent.STAGE_VIDEO_AVAILABILITY, onStageVideoAvailibility);
-                       
-                        _nc.removeEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
-                        _ns.removeEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
-                        _ns.removeEventListener(IOErrorEvent.IO_ERROR, onIoErrorEvent);
-                       
-                        if(_myStageVideo)       _myStageVideo.removeEventListener( StageVideoEvent.RENDER_STATE, stageVideoStateChange );
-                }
+					removeEventListener(Event.REMOVED_FROM_STAGE, onRemove);
+				   
+					Config.STAGE.removeEventListener(StageVideoAvailabilityEvent.STAGE_VIDEO_AVAILABILITY, onStageVideoAvailibility);
+				   
+					_nc.removeEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
+					_ns.removeEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
+					_ns.removeEventListener(IOErrorEvent.IO_ERROR, onIoErrorEvent);
+				   
+					if(_myStageVideo)       _myStageVideo.removeEventListener( StageVideoEvent.RENDER_STATE, stageVideoStateChange );
+				}
                
                 protected function onRemove(event:Event = null):void
                 {

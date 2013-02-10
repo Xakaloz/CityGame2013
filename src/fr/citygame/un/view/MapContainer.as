@@ -111,10 +111,10 @@ package fr.citygame.un.view
 		{
 			_count ++;
 			
-			temp = _tabPlayers.length;
-			for (i = 0; i < temp; i++)
+			while (_tabPlayers.length > 0)
 			{
-				removeChild(_tabPlayers[i]);
+				removeChild(_tabPlayers[0]);
+				_tabPlayers.shift();
 			}
 			
 			if (Data.playersVo && Data.playersVo.length > 0)

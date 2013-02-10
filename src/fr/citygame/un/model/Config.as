@@ -1,5 +1,6 @@
 package fr.citygame.un.model 
 {
+	import flash.display.Stage;
 	import flash.geom.Point;
 	import flash.media.StageVideo;
 	import flash.net.NetConnection;
@@ -10,6 +11,7 @@ package fr.citygame.un.model
 	 */
 	public class Config 
 	{
+		static public var STAGE:Stage;
 		
 		public static const URL				:String = "http://city-game.appus.fr/air/";
 		
@@ -17,7 +19,7 @@ package fr.citygame.un.model
 		public static const TIMER_DELAY			:uint = 1000;
 		
 		// Temps de raffraîchissement en secondes des requêtes au serveur.
-		public static const REFRESH_PLAYERS_DELAY			:uint = 3;
+		public static const REFRESH_PLAYERS_DELAY			:uint = 3
 		
 		public static var stageWidth		:Number;
 		public static var stageHeight		:Number;
@@ -50,6 +52,8 @@ package fr.citygame.un.model
 		
 		public static var ratioX:Number = 1024 / pointAmplitude.x;
 		public static var ratioY:Number = 1024 / pointAmplitude.y;
+		
+		public static var power:Number = 2;
 		
 	}
 

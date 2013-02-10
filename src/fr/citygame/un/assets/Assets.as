@@ -47,7 +47,7 @@ package fr.citygame.un.assets
 		public static var xml:XML = XML(new Assets.SPRITE_SHEET_XML());
 		public static var impactTextureAltas:TextureAtlas = new TextureAtlas(textureImpact, xml);
 		
-		[Embed(source="../../../../../bin/assets/images/pictosJoueurs.png")]
+		[Embed(source="../../../../../bin/assets/images/pictosJoueursSi.png")]
 		public static const PICTO_MONKEY:Class;
 		
 		public static var textureMonkey:Texture = Texture.fromBitmap(new PICTO_MONKEY());
@@ -55,8 +55,18 @@ package fr.citygame.un.assets
 		[Embed(source="../../../../../bin/assets/images/pictosJoueursEl.png")]
 		public static const PICTO_ELEPHANT:Class;
 		
-		
 		public static var textureElephant:Texture = Texture.fromBitmap(new PICTO_ELEPHANT());
+		
+		[Embed(source="../../../../../bin/assets/images/btnStartUp.png")]
+		public static const BTN_UP:Class;
+		
+		[Embed(source="../../../../../bin/assets/images/btnStartDown.png")]
+		public static const BTN_DOWN:Class;
+		
+		[Embed(source="../../../../../bin/assets/images/patientezOverlay.png")]
+		public static const SCREEN_WAIT:Class;
+		
+		public static var textureWait:Texture = Texture.fromBitmap(new SCREEN_WAIT());
 	}
 
 }

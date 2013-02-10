@@ -23,13 +23,13 @@ package fr.citygame.un.utils
 	 * @author Jon Lucas
 	 */
 	public class SendReceive extends EventDispatcher
-	{
+	{		
 		private var _loader						:URLLoader;
-		private var _loaderShot					:URLLoader;
-		private var _loaderMove					:URLLoader;
 		private var _loaderJoueurs				:URLLoader;
 		private var _loaderImpacts				:URLLoader;
 		private var _loaderPseudo				:URLLoader;
+		private var _loaderMove					:URLLoader;
+		private var _loaderShot					:URLLoader;
 		private var _urlVars					:URLVariables;
 		private var _request					:URLRequest;
 		
@@ -128,9 +128,9 @@ package fr.citygame.un.utils
 		public function sendShot(pIdPlayer:uint, pIdWeapon:uint, pDirection:Number, pPuissance:Number):void
 		{
 			_urlVars = new URLVariables();
-			_urlVars.id_joueur = pIdPlayer;
+			_urlVars.id_joueur = Data.playerVo.id;
 			_urlVars.id_arme = pIdWeapon;
-			_urlVars.direction = rad2deg(pDirection);
+			_urlVars.direction = rad2deg(Data.rotation);
 			_urlVars.puissance = pPuissance;
 			
             _request = new URLRequest(Config.URL + "tir");
@@ -165,26 +165,24 @@ package fr.citygame.un.utils
 					parser.parseCreatePlayer(XML(event.currentTarget.data));
 					dispatchEvent(new Event(Event.COMPLETE));
 					break;
-					
-					default : break;
 			}
 			
         }
  
         private function openHandler(event:Event):void {
-            trace("openHandler: " + event);
+            //trace("openHandler: " + event);
         }
  
         private function progressHandler(event:ProgressEvent):void {
-            trace("progressHandler loaded:" + event.bytesLoaded + " total: " + event.bytesTotal);
+           // trace("progressHandler loaded:" + event.bytesLoaded + " total: " + event.bytesTotal);
         }
  
         private function securityErrorHandler(event:SecurityErrorEvent):void {
-            trace("securityErrorHandler: " + event);
+           // trace("securityErrorHandler: " + event);
         }
  
         private function httpStatusHandler(event:HTTPStatusEvent):void {
-            trace("httpStatusHandler: " + event);
+           // trace("httpStatusHandler: " + event);
         }
  
         private function ioErrorHandler(event:IOErrorEvent):void {

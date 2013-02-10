@@ -5,11 +5,13 @@ package fr.citygame.un.view
 	import flash.events.TimerEvent;
 	import flash.events.TouchEvent;
 	import flash.utils.Timer;
+	import fr.citygame.un.assets.Assets;
 	import fr.citygame.un.data.Data;
 	import fr.citygame.un.events.AppEvent;
 	import fr.citygame.un.model.Config;
 	import fr.citygame.un.model.PhasesDeJeu;
 	import fr.citygame.un.utils.SendReceive;
+	import starling.display.Image;
 	import starling.display.Quad;
 	import starling.display.Sprite;
 	
@@ -25,7 +27,7 @@ package fr.citygame.un.view
 		private var _timers:Timers;
 		
 		private var _timer:Timer;
-		private var _filtre:Quad;
+		private var _image:Image;
 		
 		public function GameInterface() 
 		{
@@ -74,10 +76,8 @@ package fr.citygame.un.view
 			
 			_deactivateFireMode();
 			
-			_filtre = new Quad(Config.stageWidth, Config.stageHeight);
-			_filtre.color = 0x000000;
-			_filtre.alpha = .8;
-			addChild(_filtre);
+			_image = new Image(Assets.textureWait);
+			addChild(_image);
 		}
 		
 		private function _deactivateFireMode():void
@@ -116,7 +116,7 @@ package fr.citygame.un.view
 			
 			_map.transiOut();
 			
-			_filtre = Utils.removeChild(_filtre, this);
+			_image = Utils.removeChild(_image, this);
 		}
 		
 		public function addListeners():void 
