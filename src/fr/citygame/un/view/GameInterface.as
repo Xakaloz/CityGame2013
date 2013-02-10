@@ -1,12 +1,14 @@
 package fr.citygame.un.view 
 {
 	import com.greensock.TweenNano;
+	import com.jonlucas.utils.Utils;
 	import flash.events.TimerEvent;
 	import flash.events.TouchEvent;
 	import flash.utils.Timer;
 	import fr.citygame.un.data.Data;
 	import fr.citygame.un.events.AppEvent;
 	import fr.citygame.un.model.Config;
+	import fr.citygame.un.model.PhasesDeJeu;
 	import fr.citygame.un.utils.SendReceive;
 	import starling.display.Quad;
 	import starling.display.Sprite;
@@ -53,17 +55,24 @@ package fr.citygame.un.view
 				_tirette = new Tirette();
 				_tirette.x = Config.stageWidth * .5;
 				_tirette.y = Config.playerYposition;
+				_tirette.alpha = 0;
 				addChild(_tirette);
 			}
 			
-			_tirette.activateTirette();
-			
-			_tirette.addEventListener(AppEvent.PLAYER_SHOOTED, onPlayerShootedHandler);
+			TweenNano.to(_tirette, .5, { alpha:1, onComplete:
+				function():void
+				{
+					_tirette.activateTirette();
+					_tirette.addEventListener(AppEvent.PLAYER_SHOOTED, onPlayerShootedHandler);
+				}
+			} );
 		}
 		
 		private function onPlayerShootedHandler(e:AppEvent):void 
 		{
 			_tirette.removeEventListener(AppEvent.PLAYER_SHOOTED, onPlayerShootedHandler);
+			
+			_deactivateFireMode();
 			
 			_filtre = new Quad(Config.stageWidth, Config.stageHeight);
 			_filtre.color = 0x000000;
@@ -76,6 +85,7 @@ package fr.citygame.un.view
 			if (_tirette) {
 				_tirette.deactivateTirette();
 				_tirette.removeEventListener(AppEvent.PLAYER_SHOOTED, onPlayerShootedHandler);
+				TweenNano.to(_tirette, .5, { alpha: 0 } );
 			}
 		}
 		
@@ -105,6 +115,8 @@ package fr.citygame.un.view
 			_timer.reset();
 			
 			_map.transiOut();
+			
+			_filtre = Utils.removeChild(_filtre, this);
 		}
 		
 		public function addListeners():void 

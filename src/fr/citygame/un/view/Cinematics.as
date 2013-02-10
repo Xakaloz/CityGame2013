@@ -57,7 +57,7 @@
                         _sWidth = Config.stageWidth;
                         _sHeight = Config.stageHeight;
                        
-                        _rapportVideo = 480 / 800;
+                        _rapportVideo = 1080 / 720;
                        
                         alpha = 0;
                        
@@ -96,7 +96,7 @@
 					_ns.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
 					_ns.addEventListener(IOErrorEvent.IO_ERROR, onIoErrorEvent);
 				   
-					/*if (event.availability == StageVideoAvailability.AVAILABLE) {
+					if (event.availability == StageVideoAvailability.AVAILABLE) {
 							trace("VideoPlayer :: StageVideo");
 						   
 							if(Config.stageVideo == null){
@@ -106,7 +106,7 @@
 						   
 							_myStageVideo = Config.stageVideo;
 							_myStageVideo.addEventListener( StageVideoEvent.RENDER_STATE, stageVideoStateChange );
-					} else {*/
+					} else {
 							//use Video API for displaying the video
 							trace("VideoPlayer :: Video API");
 						   
@@ -120,7 +120,7 @@
 							_myVideo.attachNetStream(_ns);
 						   
 							addChildAt(_myVideo, 0);
-				   // }
+				   }
 				   
 					if(_playOnAdded){
 							_ns.play(_videoFile);

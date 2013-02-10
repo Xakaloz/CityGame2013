@@ -41,7 +41,7 @@ package fr.citygame.un.view
 				_tempsTotal.text = Data.gameVo.stringRestantPartie;
 				_tempsTir.text = Data.gameVo.stringRestantTir;
 				
-				if (Data.gameVo.tpsRestantTir == 30) {
+				if (Data.gameVo.tpsRestantTir == 0) {
 					Data.phaseDeJeu = PhasesDeJeu.ANIM_ARMES;
 					dispatchEvent(new NavigationEvent(NavigationEvent.GOTO_SCREEN, ScreenType.CINEMATICS, true));
 				}

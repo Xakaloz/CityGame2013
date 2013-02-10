@@ -75,8 +75,8 @@ package fr.citygame.un.view
 						
 					case TouchPhase.ENDED :
 						Data.phaseDeJeu = PhasesDeJeu.INTRO;
-						dispatchEvent(new NavigationEvent(NavigationEvent.GOTO_SCREEN, ScreenType.CINEMATICS, true, true));
-						//dispatchEvent(new NavigationEvent(NavigationEvent.GOTO_SCREEN, ScreenType.MAIN_MENU, true, true));
+						//dispatchEvent(new NavigationEvent(NavigationEvent.GOTO_SCREEN, ScreenType.CINEMATICS, true, true));
+						dispatchEvent(new NavigationEvent(NavigationEvent.GOTO_SCREEN, ScreenType.MAIN_MENU, true, true));
 						break;
 					
 				}
