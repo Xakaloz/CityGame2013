@@ -4,6 +4,7 @@ package fr.citygame.un
 	import flash.desktop.NativeApplication;
 	import flash.desktop.SystemIdleMode;
 	import flash.display.StageDisplayState;
+	import flash.display3D.Context3DRenderMode;
 	import flash.events.Event;
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
@@ -13,9 +14,11 @@ package fr.citygame.un
 	import flash.ui.MultitouchInputMode;
 	import flash.utils.setTimeout;
 	import fr.citygame.un.controller.ScreenManager;
+	import fr.citygame.un.data.Data;
 	import fr.citygame.un.events.NavigationEvent;
 	import fr.citygame.un.model.Config;
 	import fr.citygame.un.model.LocalisationVO;
+	import fr.citygame.un.model.PhasesDeJeu;
 	import fr.citygame.un.model.ScreenType;
 	import fr.citygame.un.utils.SendReceive;
 	import fr.citygame.un.view.Cinematics;
@@ -65,19 +68,15 @@ package fr.citygame.un
 			
 			_starling.start();
 			
-			addEventListener(NavigationEvent.GOTO_SCREEN, _gotoScreenHandler);
+			stage.addEventListener(Event.COMPLETE, _gotoScreenHandler);
 			
 			/*var vb:Vibration = new Vibration();
 			vb.vibrate(500);*/
 		}
 		
-		private function _gotoScreenHandler(e:NavigationEvent):void 
+		private function _gotoScreenHandler(e:Event):void 
 		{
-			if (e.screenName == ScreenType.CINEMATICS) {
-				showCinematics();
-			} else {
-				if(_cinematicVisible)	hideCinematics();
-			}
+			showCinematics();
 		}
 		
 		private function hideCinematics():void 
@@ -88,12 +87,48 @@ package fr.citygame.un
 		
 		private function showCinematics():void 
 		{
+			trace("showCinematics()");
+			
+			_starling.stop();
+			
 			if (_cinematic == null) {
 				_cinematic = new Cinematics();
 				addChild(_cinematic);
 			}
 			_cinematicVisible = true;
-			_cinematic.transiIn();
+			
+			var params:Object = new Object();
+			
+			switch(Data.phaseDeJeu) {
+				
+				case PhasesDeJeu.INTRO:
+					params.videoFile = "assets/videos/elephant-attak_1.flv";
+					break;
+					
+				case PhasesDeJeu.ANIM_ARMES:
+					params.videoFile = "assets/videos/sing-attak.mp4";
+					break;
+					
+				case PhasesDeJeu.ANIM_IMPACTS:
+					params.videoFile = "";
+					break;
+					
+				case PhasesDeJeu.FIN:
+					params.videoFile = "";
+					break;
+				
+				
+			}
+			
+			_cinematic.addEventListener(Event.COMPLETE, onVideoComplete);
+			_cinematic.transiIn(params);
+		}
+		
+		private function onVideoComplete(e:Event):void 
+		{
+			hideCinematics();
+			
+			_starling.start();
 		}
 		
 		private function _stopStarling():void 

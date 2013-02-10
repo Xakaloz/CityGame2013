@@ -35,7 +35,7 @@ package fr.citygame.un.view
 			_movie.pivotX = _movie.width / 2;
 			_movie.pivotY = _movie.height / 2;
 			
-			_impactVo.localisation.setGeolocValues(_impactVo.localisation.latitude, _impactVo.localisation.longitude);
+			//_impactVo.localisation.setGeolocValues(_impactVo.localisation.latitude, _impactVo.localisation.longitude);
 			
 			this.x = _impactVo.localisation.x;
 			this.y = _impactVo.localisation.y;

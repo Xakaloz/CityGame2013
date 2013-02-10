@@ -3,8 +3,10 @@ package fr.citygame.un.view
 	import com.greensock.TweenNano;
 	import com.jonlucas.controller.ScreenManager;
 	import fr.citygame.un.assets.Assets;
+	import fr.citygame.un.data.Data;
 	import fr.citygame.un.events.NavigationEvent;
 	import fr.citygame.un.model.Config;
+	import fr.citygame.un.model.PhasesDeJeu;
 	import fr.citygame.un.model.ScreenType;
 	import starling.display.Image;
 	import starling.display.Sprite;
@@ -72,7 +74,9 @@ package fr.citygame.un.view
 						break;
 						
 					case TouchPhase.ENDED :
-						dispatchEvent(new NavigationEvent(NavigationEvent.GOTO_SCREEN, ScreenType.MAIN_MENU, true, true));
+						Data.phaseDeJeu = PhasesDeJeu.INTRO;
+						dispatchEvent(new NavigationEvent(NavigationEvent.GOTO_SCREEN, ScreenType.CINEMATICS, true, true));
+						//dispatchEvent(new NavigationEvent(NavigationEvent.GOTO_SCREEN, ScreenType.MAIN_MENU, true, true));
 						break;
 					
 				}

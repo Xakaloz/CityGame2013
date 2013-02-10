@@ -43,8 +43,8 @@ package fr.citygame.un.view
 		{
 			alpha = 0;
 			
-			scaleX *= .5;
-			scaleY *= .5;
+			/*scaleX *= .5;
+			scaleY *= .5;*/
 			
 			_tabPlayers = new Vector.<Player>();
 			
@@ -58,7 +58,7 @@ package fr.citygame.un.view
 			_map = new Map();
 			addChild(_map);	
 			
-			this.rotation = deg2rad(90);
+			this.rotation = deg2rad(0);
 			
 			Data.rotation = this.rotation;
 			
@@ -149,6 +149,7 @@ package fr.citygame.un.view
 			if (_count == Config.REFRESH_PLAYERS_DELAY) {
 				SendReceive.getInstance().sendPlayerMove();
 				SendReceive.getInstance().getJoueurs();
+				//SendReceive.getInstance().getImpacts();
 				_count = 0;
 			}
 			

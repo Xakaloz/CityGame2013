@@ -1,10 +1,13 @@
 package fr.citygame.un.view 
 {
+	import flash.events.Event;
 	import fr.citygame.un.data.Data;
 	import fr.citygame.un.events.AppEvent;
 	import fr.citygame.un.events.NavigationEvent;
 	import fr.citygame.un.model.Config;
+	import fr.citygame.un.model.PhasesDeJeu;
 	import fr.citygame.un.model.ScreenType;
+	import starling.core.Starling;
 	import starling.display.Sprite;
 	import starling.text.TextField;
 	
@@ -34,15 +37,17 @@ package fr.citygame.un.view
 			if(Data.gameVo){
 				Data.gameVo.tpsRestantTir--;
 				Data.gameVo.tpsRestantPartie--;
+				
 				_tempsTotal.text = Data.gameVo.stringRestantPartie;
 				_tempsTir.text = Data.gameVo.stringRestantTir;
 				
-				if (Data.gameVo.tpsRestantTir == 0) {
+				if (Data.gameVo.tpsRestantTir == 30) {
+					Data.phaseDeJeu = PhasesDeJeu.ANIM_ARMES;
 					dispatchEvent(new NavigationEvent(NavigationEvent.GOTO_SCREEN, ScreenType.CINEMATICS, true));
 				}
 			}
 		}
 		
-	}
+	}	
 
 }

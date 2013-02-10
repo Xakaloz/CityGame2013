@@ -23,8 +23,10 @@ package fr.citygame.un.utils
 	 * @author Jon Lucas
 	 */
 	public class SendReceive extends EventDispatcher
-	{		
+	{
 		private var _loader						:URLLoader;
+		private var _loaderShot					:URLLoader;
+		private var _loaderMove					:URLLoader;
 		private var _loaderJoueurs				:URLLoader;
 		private var _loaderImpacts				:URLLoader;
 		private var _loaderPseudo				:URLLoader;
@@ -120,7 +122,7 @@ package fr.citygame.un.utils
 			_request.data = _urlVars;
 			_request.method = URLRequestMethod.POST;
 			
-           _send(_loader, _request);
+           _send(_loaderMove, _request);
         }
 		
 		public function sendShot(pIdPlayer:uint, pIdWeapon:uint, pDirection:Number, pPuissance:Number):void
@@ -128,7 +130,6 @@ package fr.citygame.un.utils
 			_urlVars = new URLVariables();
 			_urlVars.id_joueur = pIdPlayer;
 			_urlVars.id_arme = pIdWeapon;
-			trace(pDirection, rad2deg(pDirection));
 			_urlVars.direction = rad2deg(pDirection);
 			_urlVars.puissance = pPuissance;
 			
@@ -136,7 +137,7 @@ package fr.citygame.un.utils
 			_request.data = _urlVars;
 			_request.method = URLRequestMethod.POST;
 			
-           _send(_loader, _request);
+           _send(_loaderShot, _request);
         }
  
         private function configureListeners(dispatcher:IEventDispatcher):void {
@@ -164,6 +165,8 @@ package fr.citygame.un.utils
 					parser.parseCreatePlayer(XML(event.currentTarget.data));
 					dispatchEvent(new Event(Event.COMPLETE));
 					break;
+					
+					default : break;
 			}
 			
         }

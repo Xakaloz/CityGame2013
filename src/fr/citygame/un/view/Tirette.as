@@ -1,12 +1,15 @@
 package fr.citygame.un.view 
 {
 	import com.greensock.TweenNano;
+	import com.jonlucas.utils.Trigonometrie;
 	import flash.geom.Point;
 	import fr.citygame.un.assets.Assets;
 	import fr.citygame.un.data.Data;
 	import fr.citygame.un.events.AppEvent;
 	import fr.citygame.un.events.NavigationEvent;
 	import fr.citygame.un.model.Config;
+	import fr.citygame.un.model.ImpactVO;
+	import fr.citygame.un.model.LocalisationVO;
 	import fr.citygame.un.model.ScreenType;
 	import fr.citygame.un.utils.SendReceive;
 	import starling.core.Starling;
@@ -99,6 +102,10 @@ package fr.citygame.un.view
 									}
 							} );
 							SendReceive.getInstance().sendShot(1, 1, Data.rotation, _distance);
+							/*var point:Object = Trigonometrie.calculCoordonneesPointSurCercle(Data.playerVo.localisation.x, Data.playerVo.localisation.y, _distance, 180, 360);
+							trace(Data.playerVo.localisation.x, Data.playerVo.localisation.y, point.x, point.y);
+							Data.impactsVo = new Vector.<ImpactVO>();
+							Data.impactsVo.push(new ImpactVO(1, 1, new LocalisationVO(0, 0, point.x, point.y), 100));*/
 						}
 						break;
 					

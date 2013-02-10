@@ -1,10 +1,11 @@
 package fr.citygame.un.view 
 {
+	import flash.events.Event;
 	import fr.citygame.un.controller.ScreenManager;
 	import fr.citygame.un.events.NavigationEvent;
 	import fr.citygame.un.model.ScreenType;
+	import starling.core.Starling;
 	import starling.display.Sprite;
-	import starling.events.Event;
 	
 	/**
 	 * ...
@@ -19,7 +20,7 @@ package fr.citygame.un.view
 			addEventListener(Event.ADDED_TO_STAGE, init);
 		}
 		
-		private function init(e:Event):void 
+		private function init(e:Object):void 
 		{
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 			
@@ -38,6 +39,7 @@ package fr.citygame.un.view
 		{
 			if (e.screenName == ScreenType.CINEMATICS) {
 				_screenManager.getCurrent().transiOut();
+				Starling.current.nativeStage.dispatchEvent(new Event(Event.COMPLETE));
 			} else {
 				_screenManager.setScreen(e.screenName);
 			}

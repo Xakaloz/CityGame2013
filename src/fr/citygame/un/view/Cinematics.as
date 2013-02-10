@@ -57,7 +57,7 @@
                         _sWidth = Config.stageWidth;
                         _sHeight = Config.stageHeight;
                        
-                        _rapportVideo = 450 / 800;
+                        _rapportVideo = 480 / 800;
                        
                         alpha = 0;
                        
@@ -224,6 +224,7 @@
                                         //trace("VideoPlayer :: NetStream.Play.Stop");
                                         removeBuffer();
                                         //_viewController.playVideo();
+										dispatchEvent(new Event(Event.COMPLETE));
                                         break;
                                
                                 case "NetStream.Play.StreamNotFound":
