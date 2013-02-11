@@ -35,12 +35,12 @@ package fr.citygame.un.view
 			
 			_timer = new Timer(Config.TIMER_DELAY);
 			
-			_map = new MapContainer();
+			_map = new MapContainer();			
 			_map.initPosition();
 			addChild(_map);
 			
 			_timers = new Timers();
-			_timers.y = 50;
+			_timers.y = 10;
 			addChild(_timers);
 		}
 		

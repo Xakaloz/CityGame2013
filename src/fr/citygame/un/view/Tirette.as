@@ -61,6 +61,7 @@ package fr.citygame.un.view
 		public function activateTirette():void
 		{
 			trace("activetteTirette()");
+			if(Data.playerVo.life > 0)
 			_tirette.addEventListener(TouchEvent.TOUCH, _touchHandler);
 		}
 		

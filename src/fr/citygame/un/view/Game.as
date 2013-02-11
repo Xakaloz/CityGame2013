@@ -1,6 +1,7 @@
 package fr.citygame.un.view 
 {
 	import flash.events.Event;
+	import flash.utils.setTimeout;
 	import fr.citygame.un.controller.ScreenManager;
 	import fr.citygame.un.events.FlashEvent;
 	import fr.citygame.un.events.NavigationEvent;
@@ -40,12 +41,18 @@ package fr.citygame.un.view
 		private function gotoScreen(e:NavigationEvent):void
 		{
 			trace("Game :: gotoScreen(" + e.screenName + ")");
-			
-			if (e.screenName == ScreenType.CINEMATICS) {
-				_screenManager.getCurrent().transiOut();
-				Starling.current.nativeStage.dispatchEvent(new FlashEvent(FlashEvent.PLAY_VIDEO));
-			}
 			_screenManager.setScreen(e.screenName);
+			if (e.screenName == ScreenType.CINEMATICS) {
+				//_screenManager.getCurrent().transiOut();
+				//Starling.current.nativeStage.dispatchEvent(new FlashEvent(FlashEvent.PLAY_VIDEO));
+				
+				setTimeout(showImpacts, 500);
+			}
+		}
+		
+		private function showImpacts():void 
+		{
+			_screenManager.setScreen(ScreenType.GAME_INTERFACE);
 		}
 		
 		/* INTERFACE fr.citygame.un.view.IScreen */

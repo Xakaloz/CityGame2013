@@ -24,10 +24,10 @@ package fr.citygame.un.view
 		
 		public function Timers() 
 		{
-			_tempsTir = new TextField(100, 40, "--:--", "Verdana", 14, 0xFFFFFF, true);
+			_tempsTir = new TextField(100, 40, "--:--", "Verdana", 18, 0xFFFFFF, true);
 			addChild(_tempsTir);
 			
-			_tempsTotal = new TextField(100, 40, "--:--", "Verdana", 14, 0xFFFFFF, true);
+			_tempsTotal = new TextField(100, 40, "--:--", "Verdana", 18, 0xFFFFFF, true);
 			_tempsTotal.x = Config.stageWidth - 100;
 			addChild(_tempsTotal);
 		}
@@ -41,7 +41,7 @@ package fr.citygame.un.view
 				_tempsTotal.text = Data.gameVo.stringRestantPartie;
 				_tempsTir.text = Data.gameVo.stringRestantTir;
 				
-				if (Data.gameVo.tpsRestantTir == 0) {
+				if (Data.gameVo.tpsRestantTir <= 0) {
 					Data.phaseDeJeu = PhasesDeJeu.ANIM_ARMES;
 					dispatchEvent(new NavigationEvent(NavigationEvent.GOTO_SCREEN, ScreenType.CINEMATICS, true));
 				}

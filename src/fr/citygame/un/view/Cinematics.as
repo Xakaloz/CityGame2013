@@ -89,7 +89,7 @@
 					if(Config.ns == null){
 						Config.ns = new NetStream(_nc);
 						Config.ns.client = this;
-						//_model.ns.bufferTime = 5;
+						//Config.ns.bufferTime = 2;
 					}
 				   
 					_ns = Config.ns;
@@ -225,7 +225,10 @@
                                         //trace("VideoPlayer :: NetStream.Play.Stop");
                                         removeBuffer();
                                         //_viewController.playVideo();
-										dispatchEvent(new Event(Event.COMPLETE));
+										if (_playing) {
+											dispatchEvent(new Event(Event.COMPLETE));
+										}
+										
                                         break;
                                
                                 case "NetStream.Play.StreamNotFound":

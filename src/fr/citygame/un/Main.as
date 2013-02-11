@@ -63,11 +63,11 @@ package fr.citygame.un
 			
 			_starling = new Starling(Game, stage);
 			// show the stats window (draw calls, memory)
-			_starling.showStats = true;
+			_starling.showStats = false;
 			// set anti-aliasing (higher the better quality but slower performance)
 			_starling.antiAliasing = 1;
 			
-			_starling.viewPort.height = Config.stageHeight;
+			//_starling.viewPort.height = Config.stageHeight;
 			
 			_starling.start();
 			
@@ -79,6 +79,7 @@ package fr.citygame.un
 		
 		private function hideCinematics():void 
 		{
+			_cinematic.removeEventListener(Event.COMPLETE, onVideoComplete);
 			_cinematicVisible = false;
 			_cinematic.transiOut();
 		}
@@ -97,22 +98,24 @@ package fr.citygame.un
 			
 			var params:Object = new Object();
 			
+			trace("IDTEAM :: " + Data.playerVo.idTeam);
+			
 			switch(Data.phaseDeJeu) {
 				
 				case PhasesDeJeu.INTRO:
-					params.videoFile = "assets/videos/singe-att2.mp4";
+					params.videoFile = Data.playerVo.idTeam == 1 ? "assets/videos/elephant-att2.mp4" : "assets/videos/singe-att2.mp4";
 					break;
 					
 				case PhasesDeJeu.ANIM_ARMES:
-					params.videoFile = "assets/videos/singe-att2.mp4";
+					params.videoFile = Data.playerVo.idTeam == 1 ? "assets/videos/elephant-attak-stretched.mp4" : "assets/videos/sing-attak-stretched.mp4";
 					break;
 					
 				case PhasesDeJeu.ANIM_IMPACTS:
-					params.videoFile = "assets/videos/singe-arrivee-stretched.mp4";
+					params.videoFile = Math.round(Math.random()+1) ? "assets/videos/choc-elephant-streched.mp4" : "assets/videos/choc-singe-stretch.mp4";
 					break;
 					
 				case PhasesDeJeu.FIN:
-					params.videoFile = "assets/videos/singe-att2.mp4";
+					params.videoFile = Data.playerVo.idTeam == 1 ? "assets/videos/elephant-att2.mp4" : "assets/videos/singe-att2.mp4";
 					break;
 			}
 			

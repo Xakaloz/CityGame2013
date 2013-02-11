@@ -2,6 +2,9 @@ package fr.citygame.un.view
 {
 	import com.greensock.TweenNano;
 	import com.jonlucas.controller.ScreenManager;
+	import flash.media.Sound;
+	import flash.media.SoundChannel;
+	import flash.media.SoundTransform;
 	import fr.citygame.un.assets.Assets;
 	import fr.citygame.un.events.NavigationEvent;
 	import fr.citygame.un.model.Config;
@@ -25,6 +28,9 @@ package fr.citygame.un.view
 		private var _touch:Touch;
 		private var _btn:Button;
 		
+		private var sound : Sound; // not MySound! 
+		private var soundTransform:SoundChannel;
+		
 		public function Home() 
 		{
 			_screen = new Image(Texture.fromBitmap(new Assets.SPLASH_SCREEN));
@@ -38,6 +44,8 @@ package fr.citygame.un.view
 			
 			_btn.x = Config.stageWidth * 0.5;
 			_btn.y = Config.stageHeight * 11 / 12;
+			
+			
 		}
 		
 		/* INTERFACE fr.citygame.un.view.IScreen */
@@ -52,6 +60,9 @@ package fr.citygame.un.view
 					addListeners();
 				}
 			} );
+			
+			sound = (new Assets.THEME) as Sound;
+			soundTransform = sound.play(0, 10);	     
 		}
 		
 		public function transiOut():void 
@@ -60,7 +71,12 @@ package fr.citygame.un.view
 			
 			removeListeners();
 			
-			TweenNano.to(this, .5, {alpha: 0,  x: -width } );
+			TweenNano.to(this, .5, { alpha: 0,  x: -width } );
+			if (soundTransform) {
+				soundTransform.stop();
+				soundTransform = null;
+				sound = null;
+			}
 		}
 		
 		public function addListeners():void 

@@ -37,6 +37,8 @@ package fr.citygame.un.utils
 		private static var instance             :SendReceive;  //holds the singleton instance
 		private static var allowInstance        :Boolean;      //indicates if singleton instance was already created
 		private static var parser				:DataParser
+		
+		private var _firstCallPlayers:Boolean = true;
 
 	   
 		/**
@@ -156,6 +158,10 @@ package fr.citygame.un.utils
 			{
 				case "Joueurs":
 					parser.parseJoueurs(XML(event.currentTarget.data));
+					if (_firstCallPlayers) {
+						dispatchEvent(new Event(Event.COMPLETE));
+						_firstCallPlayers = false;
+					}
 					break;
 				case "Impacts":
 					trace("completeHandler: " + event.currentTarget.data);

@@ -1,6 +1,7 @@
 package fr.citygame.un.view 
 {
 	import fr.citygame.un.assets.Assets;
+	import fr.citygame.un.data.Data;
 	import fr.citygame.un.model.ImpactVO;
 	import fr.citygame.un.model.PlayerVO;
 	import starling.core.Starling;
@@ -23,6 +24,12 @@ package fr.citygame.un.view
 		{
 			_impactVo = impactVo;
 			
+			if (_impactVo.idPlayer == Data.playerVo.id)	this.scaleX = scaleY = 1.25;
+			else 
+			{
+				this.scaleX = scaleY = 1;
+			}
+			
 			//this.scaleX = scaleY = 0.75;
 			
 			_movie = new MovieClip(Assets.impactTextureAltas.getTextures("elephant"), 15);
@@ -32,6 +39,8 @@ package fr.citygame.un.view
 			
 			Starling.juggler.add(_movie);
 			
+			addEventListener(Event.REMOVED_FROM_STAGE, onRemove);
+			
 			_movie.pivotX = _movie.width / 2;
 			_movie.pivotY = _movie.height / 2;
 			
@@ -39,6 +48,13 @@ package fr.citygame.un.view
 			
 			this.x = _impactVo.localisation.x;
 			this.y = _impactVo.localisation.y;
+		}
+		
+		private function onRemove(e:Event):void 
+		{
+			removeEventListener(Event.REMOVED_FROM_STAGE, onRemove);
+			
+			if(_movie)	Starling.juggler.remove(_movie);
 		}
 		
 	}

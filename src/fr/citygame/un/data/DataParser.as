@@ -76,7 +76,7 @@ package fr.citygame.un.data
 		
 		public function parseCreatePlayer(xml:XML):void 
 		{
-			Data.playerVo = new PlayerVO(xml.id, xml.pseudo, xml.idTeam, null, Data.playerVo.localisation, 0, null);
+			Data.playerVo = new PlayerVO(xml.id, xml.pseudo, xml.id_equipe, null, Data.playerVo.localisation, 100, null);
 		}
 		
 	}

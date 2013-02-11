@@ -33,6 +33,8 @@ package fr.citygame.un.view
 		
 		private function onInitComplete(e:Event):void 
 		{
+			SendReceive.getInstance().removeEventListener(Event.COMPLETE, onInitComplete);
+			
 			dispatchEvent(new NavigationEvent(NavigationEvent.GOTO_SCREEN, ScreenType.GAME_INTERFACE, true, true));
 		}
 		
@@ -61,8 +63,14 @@ package fr.citygame.un.view
 		
 		public function addListeners():void 
 		{
-			//_screen.addEventListener(TouchEvent.TOUCH, _touchHandler);
+			SendReceive.getInstance().addEventListener(Event.COMPLETE, onPlayerComplete);
 			SendReceive.getInstance().createPlayer("pseudo");
+		}
+		
+		private function onPlayerComplete(e:Event):void 
+		{
+			SendReceive.getInstance().removeEventListener(Event.COMPLETE, onPlayerComplete);
+			SendReceive.getInstance().getJoueurs();
 			SendReceive.getInstance().addEventListener(Event.COMPLETE, onInitComplete);
 		}
 		

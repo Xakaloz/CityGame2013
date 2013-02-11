@@ -9,6 +9,8 @@ package fr.citygame.un.assets
 	 */
 	public class Assets 
 	{
+		[Embed(source="../../../../../bin/assets/music/theme.mp3")] 
+		public static const THEME : Class; 		 
 		
 		[Embed(source="../../../../../bin/assets/images/interfaceSplashComplete.jpg")]
 		public static const SPLASH_SCREEN:Class;

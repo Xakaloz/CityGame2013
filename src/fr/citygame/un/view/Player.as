@@ -1,12 +1,14 @@
 package fr.citygame.un.view 
 {
 	import fr.citygame.un.assets.Assets;
+	import fr.citygame.un.data.Data;
 	import fr.citygame.un.model.PlayerVO;
 	import starling.core.Starling;
 	import starling.display.Image;
 	import starling.display.MovieClip;
 	import starling.display.Quad;
 	import starling.display.Sprite;
+	import starling.events.Event;
 	
 	/**
 	 * ...
@@ -33,6 +35,8 @@ package fr.citygame.un.view
 			//_image = new Image(Assets.textureElephant);
 			
 			Starling.juggler.add(_image);
+			
+			addEventListener(Event.REMOVED_FROM_STAGE, onRemove);
 			
 			addChild(_image);
 			
@@ -66,6 +70,27 @@ package fr.citygame.un.view
 			_filtre.scaleX = _playerVo.life / 100;
 			
 			_filtre.x = _filtreBlack.x - _filtreBlack.width / 2 + 1;
+			
+			if (Data.playerVo.life > 0) {
+				alpha = 1;
+			} else {
+				alpha = .2;
+			}
+		}
+		
+		private function onRemove(e:Event):void 
+		{
+			removeEventListener(Event.REMOVED_FROM_STAGE, onRemove);
+			
+			if (_image) {
+				Starling.juggler.remove(_image);
+				
+				removeChild(_filtreBlack);
+				_filtreBlack = null;
+				
+				removeChild(_filtre);
+				_filtre = null;
+			}
 		}
 		
 	}
