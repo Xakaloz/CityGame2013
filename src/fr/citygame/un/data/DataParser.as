@@ -54,6 +54,8 @@ package fr.citygame.un.data
 					playerVO = new PlayerVO(itemJoueur.@id, itemJoueur.pseudo, itemEquipe.@id, null, localisationVo, itemJoueur.vie);
 					
 					Data.playersVo.push(playerVO);
+					
+					if (Data.playersVo.length == 10 || Data.playersVo.length == 20) break;
 				}
 			}
 		}

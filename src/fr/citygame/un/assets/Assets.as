@@ -1,5 +1,7 @@
 package fr.citygame.un.assets 
 {
+	import flash.display.MovieClip;
+	import fr.citygame.un.utils.UnpackEmbed;
 	import starling.textures.Texture;
 	import starling.textures.TextureAtlas;
 	
@@ -9,6 +11,12 @@ package fr.citygame.un.assets
 	 */
 	public class Assets 
 	{
+		
+		[Embed(source = "../../../../../bin/assets/swf/singe-attack.swf")]
+		public static const SINGE_ATTAK : Class;
+		
+		public static var SINGE_ATTAK_MC : UnpackEmbed = new UnpackEmbed(SINGE_ATTAK);
+		
 		[Embed(source="../../../../../bin/assets/music/theme.mp3")] 
 		public static const THEME : Class; 		 
 		

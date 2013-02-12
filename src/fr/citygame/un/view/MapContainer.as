@@ -62,10 +62,10 @@ package fr.citygame.un.view
 			
 			Data.rotation = this.rotation;
 			
-			_compassUtils = new CompassUtils();
+			/*_compassUtils = new CompassUtils();
 			
 			_gpsUtils = new GeolocUtils();
-			_gpsUtils.start();
+			_gpsUtils.start();*/
 			
 			//createPlayer(47.203541, -1.565986);
 			//createPlayer(47.204503,-1.568303);
@@ -192,14 +192,14 @@ package fr.citygame.un.view
 		
 		public function addListeners():void 
 		{
-			_gpsUtils.addEventListener(GpsEvent.UPDATE, onGpsUpdate);
-			_compassUtils.addEventListener(CompassEvent.UPDATE, onCompassUpdate);
+			/*_gpsUtils.addEventListener(GpsEvent.UPDATE, onGpsUpdate);
+			_compassUtils.addEventListener(CompassEvent.UPDATE, onCompassUpdate);*/
 		}
 		
 		public function removeListeners():void 
 		{
-			_gpsUtils.removeEventListener(GpsEvent.UPDATE, onGpsUpdate);
-			_compassUtils.removeEventListener(CompassEvent.UPDATE, onCompassUpdate);
+			/*_gpsUtils.removeEventListener(GpsEvent.UPDATE, onGpsUpdate);
+			_compassUtils.removeEventListener(CompassEvent.UPDATE, onCompassUpdate);*/
 		}
 		
 		public function initPosition():void 

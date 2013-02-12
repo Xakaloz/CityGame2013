@@ -1,8 +1,11 @@
 package fr.citygame.un
 {
 	import com.adobe.nativeExtensions.Vibration;
+	import com.greensock.loading.display.ContentDisplay;
+	import com.greensock.loading.SWFLoader;
 	import flash.desktop.NativeApplication;
 	import flash.desktop.SystemIdleMode;
+	import flash.display.MovieClip;
 	import flash.display.StageDisplayState;
 	import flash.display3D.Context3DRenderMode;
 	import flash.events.Event;
@@ -13,6 +16,7 @@ package fr.citygame.un
 	import flash.ui.Multitouch;
 	import flash.ui.MultitouchInputMode;
 	import flash.utils.setTimeout;
+	import fr.citygame.un.assets.Assets;
 	import fr.citygame.un.controller.ScreenManager;
 	import fr.citygame.un.data.Data;
 	import fr.citygame.un.events.FlashEvent;
@@ -37,6 +41,7 @@ package fr.citygame.un
 		
 		private var _cinematic:Cinematics;
 		private var _cinematicVisible:Boolean;
+		private var swf:MovieClip;
 		
 		
 		public function Main():void 
@@ -77,24 +82,9 @@ package fr.citygame.un
 			vb.vibrate(500);*/
 		}
 		
-		private function hideCinematics():void 
-		{
-			_cinematic.removeEventListener(Event.COMPLETE, onVideoComplete);
-			_cinematicVisible = false;
-			_cinematic.transiOut();
-		}
-		
 		private function showCinematics(event:Event):void 
 		{
 			trace("showCinematics(" + Data.phaseDeJeu + ")");
-			
-			if (_cinematic == null) {
-				_cinematic = new Cinematics();
-				addChild(_cinematic);
-			}
-			_cinematicVisible = true;
-			
-			_stopStarling();
 			
 			var params:Object = new Object();
 			
@@ -107,10 +97,13 @@ package fr.citygame.un
 					break;
 					
 				case PhasesDeJeu.ANIM_ARMES:
+					trace("ANIM_ARMES");
+					swf = Assets.SINGE_ATTAK_MC.content;
 					params.videoFile = Data.playerVo.idTeam == 1 ? "assets/videos/elephant-attak-stretched.mp4" : "assets/videos/sing-attak-stretched.mp4";
 					break;
 					
 				case PhasesDeJeu.ANIM_IMPACTS:
+					swf = Assets.SINGE_ATTAK_MC.content;
 					params.videoFile = Math.round(Math.random()+1) ? "assets/videos/choc-elephant-streched.mp4" : "assets/videos/choc-singe-stretch.mp4";
 					break;
 					
@@ -119,21 +112,35 @@ package fr.citygame.un
 					break;
 			}
 			
-			_cinematic.addEventListener(Event.COMPLETE, onVideoComplete);
-			_cinematic.transiIn(params);
+			onComplete(null);
+		}
+		
+		private function onComplete(e:Event):void 
+		{
+			_starling.stop();
+			swf.addEventListener(Event.ENTER_FRAME, onEnterFrame);
+			addChild(swf);
+			swf.play();
+		}
+		
+		private function onEnterFrame(e:Event):void 
+		{
+			if (swf.currentFrame == swf.totalFrames - 12) {
+				swf.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
+				removeChild(swf);
+				swf.gotoAndStop(0);
+				onVideoComplete(null);
+			}
 		}
 		
 		private function onVideoComplete(e:Event):void 
 		{
-			hideCinematics();			
+			_starling.start();
 			
 			if (Data.phaseDeJeu == PhasesDeJeu.ANIM_ARMES) {
 				Data.phaseDeJeu = PhasesDeJeu.ANIM_IMPACTS;
 				_starling.root.dispatchEvent(new NavigationEvent(NavigationEvent.GOTO_SCREEN, ScreenType.CINEMATICS));
-				stage.dispatchEvent(new FlashEvent(FlashEvent.PLAY_VIDEO));
 			} else {
-				
-				_starling.viewPort = new Rectangle(0, 0, Config.stageWidth, Config.stageHeight);
 				
 				switch(Data.phaseDeJeu) {
 					
@@ -143,11 +150,6 @@ package fr.citygame.un
 					
 				}
 			}
-		}
-		
-		private function _stopStarling():void 
-		{
-			_starling.viewPort = new Rectangle(Config.stageWidth - 32, Config.stageHeight - 32, 32, 32);
 		}
 		
 		private function deactivate(e:Event):void 

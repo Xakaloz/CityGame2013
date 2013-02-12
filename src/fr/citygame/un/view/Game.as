@@ -43,10 +43,10 @@ package fr.citygame.un.view
 			trace("Game :: gotoScreen(" + e.screenName + ")");
 			_screenManager.setScreen(e.screenName);
 			if (e.screenName == ScreenType.CINEMATICS) {
-				//_screenManager.getCurrent().transiOut();
-				//Starling.current.nativeStage.dispatchEvent(new FlashEvent(FlashEvent.PLAY_VIDEO));
+				_screenManager.getCurrent().transiOut();
+				Starling.current.nativeStage.dispatchEvent(new FlashEvent(FlashEvent.PLAY_VIDEO));
 				
-				setTimeout(showImpacts, 500);
+				//setTimeout(showImpacts, 500);
 			}
 		}
 		
