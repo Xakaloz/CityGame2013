@@ -9,10 +9,11 @@ package fr.citygame.un.view
 	import starling.display.Quad;
 	import starling.display.Sprite;
 	import starling.events.Event;
+	import starling.utils.rad2deg;
 	
 	/**
 	 * ...
-	 * @author Félix Ardeois // Opixido
+	 * @author Félix Ardeois
 	 */
 	public class Player extends Sprite 
 	{
@@ -67,7 +68,7 @@ package fr.citygame.un.view
 			_filtre.y = -28;
 			
 			//trace("life " + _playerVo.pseudo);
-			_filtre.scaleX = _playerVo.life / 100;
+			_filtre.scaleX = _playerVo.life > 0 ? _playerVo.life / 100 : 0;
 			
 			_filtre.x = _filtreBlack.x - _filtreBlack.width / 2 + 1;
 			
@@ -76,6 +77,7 @@ package fr.citygame.un.view
 			} else {
 				alpha = .2;
 			}
+			this.rotation = -Data.rotation;
 		}
 		
 		private function onRemove(e:Event):void 

@@ -125,7 +125,8 @@ package fr.citygame.un
 		
 		private function onEnterFrame(e:Event):void 
 		{
-			if (swf.currentFrame == swf.totalFrames - 12) {
+			if (swf.currentFrame == swf.totalFrames - 12)
+			{
 				swf.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
 				removeChild(swf);
 				swf.gotoAndStop(0);
@@ -137,19 +138,17 @@ package fr.citygame.un
 		{
 			_starling.start();
 			
-			if (Data.phaseDeJeu == PhasesDeJeu.ANIM_ARMES) {
+			/*if (Data.phaseDeJeu == PhasesDeJeu.ANIM_ARMES) {*/
 				Data.phaseDeJeu = PhasesDeJeu.ANIM_IMPACTS;
-				_starling.root.dispatchEvent(new NavigationEvent(NavigationEvent.GOTO_SCREEN, ScreenType.CINEMATICS));
+				/*_starling.root.dispatchEvent(new NavigationEvent(NavigationEvent.GOTO_SCREEN, ScreenType.CINEMATICS));
 			} else {
-				
-				switch(Data.phaseDeJeu) {
-					
-					case PhasesDeJeu.ANIM_IMPACTS :
+				switch(Data.phaseDeJeu) {	
+					case PhasesDeJeu.ANIM_IMPACTS :*/
 						_starling.root.dispatchEvent(new NavigationEvent(NavigationEvent.GOTO_SCREEN, ScreenType.GAME_INTERFACE));
-						break;
+						/*break;
 					
-				}
-			}
+				/*}
+			}*/
 		}
 		
 		private function deactivate(e:Event):void 

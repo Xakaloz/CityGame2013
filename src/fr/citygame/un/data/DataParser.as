@@ -55,6 +55,13 @@ package fr.citygame.un.data
 					
 					Data.playersVo.push(playerVO);
 					
+					/*if (Data.playersVoObjects[playerVO.id]) {
+						PlayerVO(Data.playersVoObjects[playerVO.id]).localisation = localisationVo;
+						PlayerVO(Data.playersVoObjects[playerVO.id]).life = playerVO.vie;
+					} else {
+						Data.playersVoObjects[playerVO.id] = playerVO;
+					}*/
+					
 					if (Data.playersVo.length == 10 || Data.playersVo.length == 20) break;
 				}
 			}

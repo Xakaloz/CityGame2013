@@ -30,8 +30,8 @@ package fr.citygame.un.model
 		
 		public function set tpsRestantTir(value:uint):void 
 		{
-			_tpsRestantTir = value;
-			stringRestantTir = DateUtils.convertSecondsToHMS(value);
+			_tpsRestantTir = value%30;
+			stringRestantTir = String(_tpsRestantTir) + "s"; //DateUtils.convertSecondsToHMS(value);
 		}
 		
 		public function get tpsRestantPartie():uint 
@@ -42,7 +42,7 @@ package fr.citygame.un.model
 		public function set tpsRestantPartie(value:uint):void 
 		{
 			_tpsRestantPartie = value;
-			stringRestantPartie = DateUtils.convertSecondsToHMS(value);
+			stringRestantPartie = DateUtils.convertSecondsToMS(value);
 		}
 		
 		public function get tpsProchainTir():uint 
@@ -53,7 +53,7 @@ package fr.citygame.un.model
 		public function set tpsProchainTir(value:uint):void 
 		{
 			_tpsProchainTir = value;
-			stringProchainTir = DateUtils.convertSecondsToHMS(value);
+			stringProchainTir = DateUtils.convertSecondsToMS(value);
 		}
 		
 	}

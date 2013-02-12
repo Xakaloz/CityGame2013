@@ -60,14 +60,13 @@ package fr.citygame.un.view
 		
 		public function activateTirette():void
 		{
-			trace("activetteTirette()");
-			if(Data.playerVo.life > 0)
+			trace("activateTirette()");
 			_tirette.addEventListener(TouchEvent.TOUCH, _touchHandler);
 		}
 		
 		public function deactivateTirette():void
 		{
-			trace("deactivetteTirette()");
+			trace("deactivateTirette()");
 			_tirette.removeEventListener(TouchEvent.TOUCH, _touchHandler);
 		}
 		

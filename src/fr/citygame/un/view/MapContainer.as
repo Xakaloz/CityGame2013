@@ -58,14 +58,14 @@ package fr.citygame.un.view
 			_map = new Map();
 			addChild(_map);	
 			
-			this.rotation = deg2rad(0);
+			this.rotation = deg2rad(90);
 			
 			Data.rotation = this.rotation;
 			
-			/*_compassUtils = new CompassUtils();
+			_compassUtils = new CompassUtils();
 			
 			_gpsUtils = new GeolocUtils();
-			_gpsUtils.start();*/
+			_gpsUtils.start();
 			
 			//createPlayer(47.203541, -1.565986);
 			//createPlayer(47.204503,-1.568303);
@@ -149,7 +149,6 @@ package fr.citygame.un.view
 			if (_count == Config.REFRESH_PLAYERS_DELAY) {
 				SendReceive.getInstance().sendPlayerMove();
 				SendReceive.getInstance().getJoueurs();
-				//SendReceive.getInstance().getImpacts();
 				_count = 0;
 			}
 			
@@ -192,14 +191,14 @@ package fr.citygame.un.view
 		
 		public function addListeners():void 
 		{
-			/*_gpsUtils.addEventListener(GpsEvent.UPDATE, onGpsUpdate);
-			_compassUtils.addEventListener(CompassEvent.UPDATE, onCompassUpdate);*/
+			_gpsUtils.addEventListener(GpsEvent.UPDATE, onGpsUpdate);
+			_compassUtils.addEventListener(CompassEvent.UPDATE, onCompassUpdate);
 		}
 		
 		public function removeListeners():void 
 		{
-			/*_gpsUtils.removeEventListener(GpsEvent.UPDATE, onGpsUpdate);
-			_compassUtils.removeEventListener(CompassEvent.UPDATE, onCompassUpdate);*/
+			_gpsUtils.removeEventListener(GpsEvent.UPDATE, onGpsUpdate);
+			_compassUtils.removeEventListener(CompassEvent.UPDATE, onCompassUpdate);
 		}
 		
 		public function initPosition():void 

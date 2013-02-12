@@ -52,10 +52,10 @@
     <image512x512>icons/icon_512.png</image512x512>
   </icon>
   
-  <!--<extensions>
+  <extensions>
     <extensionID>com.christiancantrell.compass</extensionID>
     <extensionID>com.adobe.Vibration</extensionID>
-  </extensions>-->
+  </extensions>
   
   <!-- 
 	AIR options:
