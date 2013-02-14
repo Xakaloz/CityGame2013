@@ -28,6 +28,7 @@ package fr.citygame.un
 	import fr.citygame.un.utils.SendReceive;
 	import fr.citygame.un.view.Cinematics;
 	import fr.citygame.un.view.Game;
+	import fr.citygame.un.view.SWFPlayer;
 	import starling.core.Starling;
 	
 	/**
@@ -39,13 +40,11 @@ package fr.citygame.un
 	{
 		private var _starling:Starling;
 		
-		private var _cinematic:Cinematics;
-		private var _cinematicVisible:Boolean;
-		private var swf:MovieClip;
+		private var _swfPlayer:SWFPlayer;
 		
 		
 		public function Main():void 
-		{
+		{			
 			Config.STAGE = stage;
 			
 			stage.scaleMode = StageScaleMode.NO_SCALE;
@@ -56,100 +55,20 @@ package fr.citygame.un
 			
 			NativeApplication.nativeApplication.systemIdleMode = SystemIdleMode.KEEP_AWAKE;
 			
-			/*if (stage.allowsFullScreenInteractive) {
-				stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
-			}*/
-			
 			Config.stageWidth = stage.stageWidth;
 			Config.stageHeight = stage.stageHeight;
 			
-			// touch or gesture?
 			Multitouch.inputMode = MultitouchInputMode.TOUCH_POINT;
 			
 			_starling = new Starling(Game, stage);
-			// show the stats window (draw calls, memory)
 			_starling.showStats = false;
-			// set anti-aliasing (higher the better quality but slower performance)
 			_starling.antiAliasing = 1;
 			
-			//_starling.viewPort.height = Config.stageHeight;
-			
 			_starling.start();
 			
-			stage.addEventListener(FlashEvent.PLAY_VIDEO, showCinematics);
-			
-			/*var vb:Vibration = new Vibration();
-			vb.vibrate(500);*/
+			_swfPlayer = new SWFPlayer(stage, _starling);
 		}
 		
-		private function showCinematics(event:Event):void 
-		{
-			trace("showCinematics(" + Data.phaseDeJeu + ")");
-			
-			var params:Object = new Object();
-			
-			trace("IDTEAM :: " + Data.playerVo.idTeam);
-			
-			switch(Data.phaseDeJeu) {
-				
-				case PhasesDeJeu.INTRO:
-					params.videoFile = Data.playerVo.idTeam == 1 ? "assets/videos/elephant-att2.mp4" : "assets/videos/singe-att2.mp4";
-					break;
-					
-				case PhasesDeJeu.ANIM_ARMES:
-					trace("ANIM_ARMES");
-					swf = Assets.SINGE_ATTAK_MC.content;
-					params.videoFile = Data.playerVo.idTeam == 1 ? "assets/videos/elephant-attak-stretched.mp4" : "assets/videos/sing-attak-stretched.mp4";
-					break;
-					
-				case PhasesDeJeu.ANIM_IMPACTS:
-					swf = Assets.SINGE_ATTAK_MC.content;
-					params.videoFile = Math.round(Math.random()+1) ? "assets/videos/choc-elephant-streched.mp4" : "assets/videos/choc-singe-stretch.mp4";
-					break;
-					
-				case PhasesDeJeu.FIN:
-					params.videoFile = Data.playerVo.idTeam == 1 ? "assets/videos/elephant-att2.mp4" : "assets/videos/singe-att2.mp4";
-					break;
-			}
-			
-			onComplete(null);
-		}
-		
-		private function onComplete(e:Event):void 
-		{
-			_starling.stop();
-			swf.addEventListener(Event.ENTER_FRAME, onEnterFrame);
-			addChild(swf);
-			swf.play();
-		}
-		
-		private function onEnterFrame(e:Event):void 
-		{
-			if (swf.currentFrame == swf.totalFrames - 12)
-			{
-				swf.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
-				removeChild(swf);
-				swf.gotoAndStop(0);
-				onVideoComplete(null);
-			}
-		}
-		
-		private function onVideoComplete(e:Event):void 
-		{
-			_starling.start();
-			
-			/*if (Data.phaseDeJeu == PhasesDeJeu.ANIM_ARMES) {*/
-				Data.phaseDeJeu = PhasesDeJeu.ANIM_IMPACTS;
-				/*_starling.root.dispatchEvent(new NavigationEvent(NavigationEvent.GOTO_SCREEN, ScreenType.CINEMATICS));
-			} else {
-				switch(Data.phaseDeJeu) {	
-					case PhasesDeJeu.ANIM_IMPACTS :*/
-						_starling.root.dispatchEvent(new NavigationEvent(NavigationEvent.GOTO_SCREEN, ScreenType.GAME_INTERFACE));
-						/*break;
-					
-				/*}
-			}*/
-		}
 		
 		private function deactivate(e:Event):void 
 		{

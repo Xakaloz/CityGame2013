@@ -13,7 +13,7 @@ package fr.citygame.un.view
 	
 	/**
 	 * ...
-	 * @author Félix Ardeois // Opixido
+	 * @author Félix Ardeois
 	 */
 	public class Impact extends Sprite 
 	{
@@ -32,12 +32,15 @@ package fr.citygame.un.view
 			
 			//this.scaleX = scaleY = 0.75;
 			
-			_movie = new MovieClip(Assets.impactTextureAltas.getTextures("elephant"), 15);
+			_movie = new MovieClip(Assets.texAtlasImpact.getTextures("elephant"), 15);
 			addChild(_movie);
 			
 			_movie.loop = false;
 			
 			Starling.juggler.add(_movie);
+			
+			/*var vb:Vibration = new Vibration();
+			vb.vibrate(500);*/
 			
 			addEventListener(Event.REMOVED_FROM_STAGE, onRemove);
 			

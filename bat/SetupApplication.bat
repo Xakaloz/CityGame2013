@@ -39,7 +39,7 @@ set DIST_PATH=dist
 set DIST_NAME=CityGame2013
 
 :: Debugging using a custom IP
-set DEBUG_IP=192.168.89.33
+set DEBUG_IP=
 
 
 

@@ -36,7 +36,7 @@ package fr.citygame.un.view
 			_screen = new Image(Texture.fromBitmap(new Assets.SPLASH_SCREEN));
 			addChild(_screen);
 			
-			_btn = new Button(Texture.fromBitmap(new Assets.BTN_DOWN),"", Texture.fromBitmap(new Assets.BTN_UP));
+			_btn = new Button(Texture.fromBitmap(new Assets.BTN_START_DOWN),"", Texture.fromBitmap(new Assets.BTN_START_UP));
 			addChild(_btn);
 			
 			_btn.pivotX = _btn.width / 2;

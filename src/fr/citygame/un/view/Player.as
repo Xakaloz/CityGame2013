@@ -26,14 +26,10 @@ package fr.citygame.un.view
 		{
 			_playerVo = playerVo;
 			
-			//this.scaleX = scaleY = 0.75;
-			
 			if (_playerVo.idTeam == 1)
-			//_image = new Image(Assets.textureMonkey);
-			_image = new MovieClip(Assets.impactTextureAltas.getTextures("pictoElephant"), 30);
+				_image = new MovieClip(Assets.texAtlasImpact.getTextures("pictoElephant"), 30);
 			else
-			_image = new MovieClip(Assets.impactTextureAltas.getTextures("pictoSinge"), 30);
-			//_image = new Image(Assets.textureElephant);
+				_image = new MovieClip(Assets.texAtlasImpact.getTextures("pictoSinge"), 30);
 			
 			Starling.juggler.add(_image);
 			
@@ -44,18 +40,12 @@ package fr.citygame.un.view
 			_image.pivotX = _image.width / 2;
 			_image.pivotY = _image.height / 2;
 			
-			_playerVo.localisation.setGeolocValues(_playerVo.localisation.latitude, _playerVo.localisation.longitude);
-			
-			this.x = _playerVo.localisation.x;
-			this.y = _playerVo.localisation.y;
-			
 			_filtreBlack = new Quad(_image.width - 20, 7);
 			_filtreBlack.color = 0x000000;
 			_filtreBlack.alpha = .8;
 			addChild(_filtreBlack);
 			
 			_filtreBlack.pivotX = _filtreBlack.width / 2;
-			
 			_filtreBlack.y = -29;
 			
 			_filtre = new Quad(_image.width - 22, 5);
@@ -63,15 +53,21 @@ package fr.citygame.un.view
 			_filtre.alpha = .8;
 			addChild(_filtre);
 			
-			//_filtre.pivotX = _filtre.width / 2;
-			
 			_filtre.y = -28;
-			
-			//trace("life " + _playerVo.pseudo);
-			_filtre.scaleX = _playerVo.life > 0 ? _playerVo.life / 100 : 0;
-			
 			_filtre.x = _filtreBlack.x - _filtreBlack.width / 2 + 1;
 			
+			update(_playerVo);
+		}
+		
+		public function update(playerVo:PlayerVO):void
+		{
+			_playerVo = playerVo;
+			_playerVo.localisation.setGeolocValues(_playerVo.localisation.latitude, _playerVo.localisation.longitude);
+			
+			this.x = _playerVo.localisation.x;
+			this.y = _playerVo.localisation.y;
+			
+			_filtre.scaleX = _playerVo.life > 0 ? _playerVo.life / 100 : 0;
 			if (Data.playerVo.life > 0) {
 				alpha = 1;
 			} else {
@@ -93,6 +89,11 @@ package fr.citygame.un.view
 				removeChild(_filtre);
 				_filtre = null;
 			}
+		}
+		
+		public function get id():uint 
+		{
+			return _playerVo.id;
 		}
 		
 	}
