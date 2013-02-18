@@ -60,7 +60,7 @@ package fr.citygame.un.view
 					break;
 			}
 				
-			//_starling.stop();
+			_starling.stop();
 			_swf.addEventListener(Event.ENTER_FRAME, _onEnterFrame);
 			_stage.addChild(_swf);
 			_swf.play();
@@ -79,7 +79,7 @@ package fr.citygame.un.view
 		
 		private function _onComplete():void 
 		{
-			//_starling.start();
+			_starling.start();
 			
 			/*if (Data.phaseDeJeu == PhasesDeJeu.ANIM_ARMES) {*/
 				Data.phaseDeJeu = PhasesDeJeu.ANIM_IMPACTS;

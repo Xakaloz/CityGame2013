@@ -34,7 +34,6 @@ package fr.citygame.un.view
 			
 			_movie = new MovieClip(Assets.texAtlasImpact.getTextures("elephant"), 15);
 			addChild(_movie);
-			
 			_movie.loop = false;
 			
 			Starling.juggler.add(_movie);
@@ -58,6 +57,11 @@ package fr.citygame.un.view
 			removeEventListener(Event.REMOVED_FROM_STAGE, onRemove);
 			
 			if(_movie)	Starling.juggler.remove(_movie);
+		}
+		
+		public function get isComplete():Boolean
+		{
+			return _movie.isComplete;
 		}
 		
 	}

@@ -19,7 +19,7 @@ package fr.citygame.un.model
 		public static const TIMER_DELAY			:uint = 1000;
 		
 		// Temps de raffraîchissement en secondes des requêtes au serveur.
-		public static const REFRESH_PLAYERS_DELAY			:uint = 3
+		public static const REFRESH_PLAYERS_DELAY			:uint = 3;
 		
 		public static var stageWidth		:Number;
 		public static var stageHeight		:Number;

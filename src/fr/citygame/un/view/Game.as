@@ -13,7 +13,7 @@ package fr.citygame.un.view
 	 * ...
 	 * @author Jon Lucas
 	 */
-	public class Game extends Sprite implements IScreen 
+	public class Game extends Sprite
 	{
 		private var _screenManager:ScreenManager;
 		
@@ -31,7 +31,7 @@ package fr.citygame.un.view
 			_screenManager.addScreen(ScreenType.MAIN_MENU, 			new MainMenu(), 		[ScreenType.GAME_INTERFACE]);
 			_screenManager.addScreen(ScreenType.GAME_INTERFACE, 	new GameInterface(), 	[ScreenType.MAIN_MENU, ScreenType.CINEMATICS, ScreenType.SCORES, ScreenType.CINEMATICS]);
 			_screenManager.addScreen(ScreenType.SCORES, 			new Scores(), 			[ScreenType.CREDITS]);
-			_screenManager.addScreen(ScreenType.CREDITS, 			new Credits(), 			[ScreenType.HOME]); 4
+			_screenManager.addScreen(ScreenType.CREDITS, 			new Credits(), 			[ScreenType.HOME]);
 			_screenManager.addScreen(ScreenType.CINEMATICS, 		new EmptyScreen(), 		[ScreenType.HOME, ScreenType.MAIN_MENU,ScreenType.GAME_INTERFACE]);
 			_screenManager.setScreen(ScreenType.HOME);
 			
@@ -53,28 +53,6 @@ package fr.citygame.un.view
 		private function showImpacts():void 
 		{
 			_screenManager.setScreen(ScreenType.GAME_INTERFACE);
-		}
-		
-		/* INTERFACE fr.citygame.un.view.IScreen */
-		
-		public function transiIn(params:Object = null):void 
-		{
-			
-		}
-		
-		public function transiOut():void 
-		{
-			
-		}
-		
-		public function addListeners():void 
-		{
-			
-		}
-		
-		public function removeListeners():void 
-		{
-			
 		}
 		
 	}

@@ -1,60 +1,47 @@
 package fr.citygame.un.view 
 {
+	import com.jonlucas.utils.Utils;
 	import fr.citygame.un.assets.Assets;
 	import fr.citygame.un.data.Data;
 	import fr.citygame.un.model.PlayerVO;
 	import starling.core.Starling;
 	import starling.display.Image;
 	import starling.display.MovieClip;
-	import starling.display.Quad;
 	import starling.display.Sprite;
 	import starling.events.Event;
-	import starling.utils.rad2deg;
 	
 	/**
 	 * ...
 	 * @author Félix Ardeois
 	 */
-	public class Player extends Sprite 
+	public class Player extends Sprite implements IPlayer
 	{
+		private var _id:uint;
+		
 		private var _playerVo:PlayerVO;
-		private var _filtre:Quad;
-		private var _filtreBlack:Quad;
+		private var _lifeBar:LifeBar;
 		private var _image:MovieClip;
 		
-		public function Player(playerVo:PlayerVO) 
+		public function Player(pPlayerVo:PlayerVO) 
 		{
-			_playerVo = playerVo;
+			addEventListener(Event.REMOVED_FROM_STAGE, onRemove);
+			
+			_playerVo = pPlayerVo;
+			_id = _playerVo.id;
 			
 			if (_playerVo.idTeam == 1)
 				_image = new MovieClip(Assets.texAtlasImpact.getTextures("pictoElephant"), 30);
 			else
 				_image = new MovieClip(Assets.texAtlasImpact.getTextures("pictoSinge"), 30);
 			
-			Starling.juggler.add(_image);
-			
-			addEventListener(Event.REMOVED_FROM_STAGE, onRemove);
-			
+			Starling.juggler.add(_image);			
 			addChild(_image);
 			
 			_image.pivotX = _image.width / 2;
 			_image.pivotY = _image.height / 2;
 			
-			_filtreBlack = new Quad(_image.width - 20, 7);
-			_filtreBlack.color = 0x000000;
-			_filtreBlack.alpha = .8;
-			addChild(_filtreBlack);
-			
-			_filtreBlack.pivotX = _filtreBlack.width / 2;
-			_filtreBlack.y = -29;
-			
-			_filtre = new Quad(_image.width - 22, 5);
-			_filtre.color = 0x00d805;
-			_filtre.alpha = .8;
-			addChild(_filtre);
-			
-			_filtre.y = -28;
-			_filtre.x = _filtreBlack.x - _filtreBlack.width / 2 + 1;
+			_lifeBar = new LifeBar(_image.width - 20);
+			addChild(_lifeBar);
 			
 			update(_playerVo);
 		}
@@ -67,13 +54,14 @@ package fr.citygame.un.view
 			this.x = _playerVo.localisation.x;
 			this.y = _playerVo.localisation.y;
 			
-			_filtre.scaleX = _playerVo.life > 0 ? _playerVo.life / 100 : 0;
-			if (Data.playerVo.life > 0) {
+			if (_playerVo.life > 0) {
 				alpha = 1;
 			} else {
 				alpha = .2;
 			}
 			this.rotation = -Data.rotation;
+			
+			_lifeBar.update(_playerVo.life);
 		}
 		
 		private function onRemove(e:Event):void 
@@ -82,18 +70,20 @@ package fr.citygame.un.view
 			
 			if (_image) {
 				Starling.juggler.remove(_image);
+				_image = null;
 				
-				removeChild(_filtreBlack);
-				_filtreBlack = null;
-				
-				removeChild(_filtre);
-				_filtre = null;
+				_lifeBar = Utils.removeChild(_lifeBar, this);
 			}
 		}
 		
 		public function get id():uint 
 		{
-			return _playerVo.id;
+			return _id;
+		}
+		
+		public function get playerVO():PlayerVO 
+		{
+			return _playerVo;
 		}
 		
 	}

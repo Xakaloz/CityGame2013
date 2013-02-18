@@ -25,14 +25,17 @@ package fr.citygame.un.data
 		
 		private var playerVO:PlayerVO;
 		private var impactVO:ImpactVO;
+		private var _oldPlayersVO:Vector.<PlayerVO>;
 		
 		public function DataParser()
 		{
 			
 		}
 		
-		public function parseJoueurs(xml:XML):void 
+		public function parsePlayers(xml:XML):void 
 		{
+			_oldPlayersVO = Data.playersVo;
+			
 			if (Data.gameVo == null) {
 				Data.gameVo = new GameVO(xml.partie.restant_tir, xml.partie.restant_partie, xml.partie.prochain_tir);
 			} else {
@@ -49,20 +52,17 @@ package fr.citygame.un.data
 				xmlListeJoueur = itemEquipe.joueur;
 				for each(itemJoueur in xmlListeJoueur)
 				{
-					localisationVo = new LocalisationVO(itemJoueur.lat, itemJoueur.long, 0, 0);
+					localisationVo = new LocalisationVO(itemJoueur.lat, itemJoueur.long);
 					
-					playerVO = new PlayerVO(itemJoueur.@id, itemJoueur.pseudo, itemEquipe.@id, null, localisationVo, itemJoueur.vie);
+					playerVO = Data.getPlayerVO(itemJoueur.@id);
+					
+					if(playerVO == null)	playerVO = new PlayerVO(itemJoueur.@id, itemJoueur.pseudo, itemEquipe.@id, null, localisationVo, itemJoueur.vie);
+					else {
+						playerVO.localisation = localisationVo;
+						playerVO.life = itemJoueur.vie;
+					}
 					
 					Data.playersVo.push(playerVO);
-					
-					/*if (Data.playersVoObjects[playerVO.id]) {
-						PlayerVO(Data.playersVoObjects[playerVO.id]).localisation = localisationVo;
-						PlayerVO(Data.playersVoObjects[playerVO.id]).life = playerVO.vie;
-					} else {
-						Data.playersVoObjects[playerVO.id] = playerVO;
-					}*/
-					
-					if (Data.playersVo.length == 10 || Data.playersVo.length == 20) break;
 				}
 			}
 		}
@@ -73,10 +73,9 @@ package fr.citygame.un.data
 			
 			xmlListe = xml.impacts;
 			
-			//for each(item in xmlListe)
 			for each (var i:XML in xml..impact)
 			{
-				localisationVo = new LocalisationVO(i.latitude, i.longitude, 0, 0);
+				localisationVo = new LocalisationVO(i.latitude, i.longitude);
 				impactVO = new ImpactVO(i.@id, 0, localisationVo, i.rayon);
 				
 				Data.impactsVo.push(impactVO);

@@ -9,6 +9,7 @@ package fr.citygame.un.view
 	import fr.citygame.un.events.GpsEvent;
 	import fr.citygame.un.model.Config;
 	import fr.citygame.un.model.LocalisationVO;
+	import fr.citygame.un.model.PlayerVO;
 	import fr.citygame.un.utils.CompassUtils;
 	import fr.citygame.un.utils.GeolocUtils;
 	import fr.citygame.un.utils.SendReceive;
@@ -34,10 +35,9 @@ package fr.citygame.un.view
 		private var _impact:Impact;
 		private var _tabImpacts:Vector.<Impact>;
 		
+		private var _len:int;
+		private var _i:int;
 		private var _count:uint;
-		
-		private var temp:int;
-		private var i:int;
 		
 		public function MapContainer() 
 		{
@@ -50,17 +50,17 @@ package fr.citygame.un.view
 			
 			_tabImpacts = new Vector.<Impact>();
 			
-			Data.playerVo.localisation = new LocalisationVO(0, 0, 0, 0);
-			Data.playerVo.localisation.setGeolocValues(47.205555, -1.566658);
-			
-			updatePosition(Data.playerVo.localisation.x, Data.playerVo.localisation.y);
-			
 			_map = new Map();
 			addChild(_map);	
 			
 			this.rotation = deg2rad(90);
 			
 			Data.rotation = this.rotation;
+			
+			if (Data.playersVo == null)	Data.playerVo = new PlayerVO(0, "", 0, null, null, 0);
+			Data.playerVo.localisation = new LocalisationVO(0, 0);
+			Data.playerVo.localisation.setGeolocValues(47.205555, -1.566658);
+			updatePosition(Data.playerVo.localisation.x, Data.playerVo.localisation.y);
 			
 			/*_compassUtils = new CompassUtils();
 			
@@ -74,82 +74,57 @@ package fr.citygame.un.view
 		
 		private function onGpsUpdate(e:GpsEvent):void 
 		{
-			trace("UDPATE GPS");
-			//Data.playerVo.localisation = new LocalisationVO(0, 0, 0, 0);
-			//Data.playerVo.localisation.setGeolocValues(47.204979, -1.563289);
-			//Data.playerVo.localisation.setGeolocValues(47.205898,-1.567731);
-			
+			trace("GPS UPDATE");
 			Data.playerVo.localisation.setGeolocValues(e.latitude, e.longitude);
-			
 			updatePosition(Data.playerVo.localisation.x, Data.playerVo.localisation.y);
 		}
 		
 		private function updatePosition(x:Number, y:Number):void
-		{
-			var memX:Number = this.pivotX;
-			var memY:Number = this.pivotY;
-			
-			var memPoint:Point = new Point(memX, memY);
-			memPoint = this.localToGlobal(memPoint);
-			
-			var point:Point = new Point(x, y);
-			point = this.localToGlobal(point);
-			
+		{			
 			this.pivotX = x;
 			this.pivotY = y;
-			
-			trace(point.x - memPoint.x);
-			
-			//this.x += point.x - memPoint.x;
-			//this.y += point.y - memPoint.y;
-			
-			//trace("X : " + this.x);
-			//trace("pivot X : "+this.pivotX);
 		}
 			
 		public function onTick():void 
 		{
-			_count ++;
+			trace("onTick");
 			
-			while (_tabPlayers.length > 0)
-			{
-				removeChild(_tabPlayers[0]);
-				_tabPlayers.shift();
+			for each(var p:Player in _tabPlayers) {
+				if (Data.getPlayerVO(p.id) == null) {
+					removeChild(p);
+					_tabPlayers.splice(_tabPlayers.indexOf(p), 1);
+				}
 			}
 			
 			if (Data.playersVo && Data.playersVo.length > 0)
 			{
-				temp = Data.playersVo.length;
-				for (i = 0; i < temp; i++)
+				for each(var pVO:PlayerVO in Data.playersVo)
 				{
-					_player = new Player(Data.playersVo[i]);
-					addChild(_player);
-					
-					_tabPlayers.push(_player);
+					_player = getPlayer(pVO.id);
+					if (_player == null) { 
+						_player = new Player(pVO);
+						addChild(_player);
+						_tabPlayers.push(_player);
+					} else {
+						_player.update(pVO);
+					}
 				}
 			}
 			
-			temp = _tabImpacts.length;
-			for (i = 0; i < temp; i++)
-			{
-				removeChild(_tabImpacts[i]);
+			for each(var i:Impact in _tabImpacts) {
+				if (i.isComplete) {
+					removeChild(i);
+					_tabImpacts.splice(_tabImpacts.indexOf(i), 1);
+				}
 			}
 
 			if (Data.impactsVo){			
 				while(Data.impactsVo.length > 0){
 					_impact = new Impact(Data.impactsVo[0]);
 					addChild(_impact);
-					
 					Data.impactsVo.shift();
-					
 					_tabImpacts.push(_impact);
 				}
-			}
-
-			if (_count == Config.REFRESH_PLAYERS_DELAY) {
-				SendReceive.getInstance().sendPlayerMove();
-				SendReceive.getInstance().getJoueurs();
-				_count = 0;
 			}
 			
 		}
@@ -163,6 +138,15 @@ package fr.citygame.un.view
 			this.rotation = deg2rad(e.level);
 			
 			Data.rotation = this.rotation;
+		}
+		
+		
+		private function getPlayer(pId:uint):Player
+		{
+			for each(var p:Player in _tabPlayers) {
+				if (p.id == pId)	return p;
+			}
+			return null;
 		}
 		
 		/* INTERFACE fr.citygame.un.view.IScreen */

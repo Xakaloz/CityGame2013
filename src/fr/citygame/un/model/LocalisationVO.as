@@ -13,12 +13,12 @@ package fr.citygame.un.model
 		private var _x				:Number;	
 		private var _y				:Number;
 		
-		public function LocalisationVO(pLatitude:Number, pLongitude:Number, pX:Number, pY:Number ) 
+		public function LocalisationVO(pLatitude:Number, pLongitude:Number) 
 		{
 			latitude = pLatitude;
 			longitude = pLongitude;
-			x = pX;
-			y = pY;
+			
+			GeolocUtils.convertGeolocToXY(this);
 		}
 		
 		public function setGeolocValues(pLatitude:Number, pLongitude:Number):void

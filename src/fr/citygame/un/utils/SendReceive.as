@@ -14,6 +14,7 @@ package fr.citygame.un.utils
 	import flash.net.URLVariables;
 	import fr.citygame.un.data.Data;
 	import fr.citygame.un.data.DataParser;
+	import fr.citygame.un.events.DataEvent;
 	import fr.citygame.un.model.Config;
 	import fr.citygame.un.model.LocalisationVO;
 	import starling.utils.rad2deg;
@@ -23,7 +24,17 @@ package fr.citygame.un.utils
 	 * @author Jon Lucas
 	 */
 	public class SendReceive extends EventDispatcher
-	{		
+	{	
+		private static const INIT_GAME			:String = "getDatasInit";
+		
+		private static const CREATE_PLAYER		:String = "creationJoueur";
+		private static const GET_PLAYERS		:String = "getJoueurs";
+		private static const GET_IMPACTS		:String = "getImpacts";
+		
+		private static const SEND_SHOT			:String = "tir";
+		private static const SEND_MOVE			:String = "deplacement";
+		
+		
 		private var _loader						:URLLoader;
 		private var _loaderJoueurs				:URLLoader;
 		private var _loaderImpacts				:URLLoader;
@@ -52,18 +63,6 @@ package fr.citygame.un.utils
 			}
 		}
 		
-		public function initGame(pPseudo:String):void
-		{
-			_urlVars = new URLVariables();
-			_urlVars.pseudo = pPseudo;
-			
-			_request = new URLRequest(Config.URL + "getDatasInit");
-			_request.data = _urlVars;
-			_request.method = URLRequestMethod.POST;
-			
-			_send(_loader, _request);
-        }
-		
 		private function _send(loader:URLLoader, pRequest:URLRequest, name:String = ""):void 
 		{
 			if(loader == null){
@@ -84,32 +83,44 @@ package fr.citygame.un.utils
             }
 		}
 		
+		public function initGame(pPseudo:String):void
+		{
+			_urlVars = new URLVariables();
+			_urlVars.pseudo = pPseudo;
+			
+			_request = new URLRequest(Config.URL + INIT_GAME);
+			_request.data = _urlVars;
+			_request.method = URLRequestMethod.POST;
+			
+			_send(_loader, _request);
+        }
+		
 		public function createPlayer(pPseudo:String):void
 		{
 			_urlVars = new URLVariables();
 			_urlVars.pseudo = pPseudo;
 			
-			_request = new URLRequest(Config.URL + "creationJoueur");
+			_request = new URLRequest(Config.URL + CREATE_PLAYER);
 			_request.data = _urlVars;
 			_request.method = URLRequestMethod.POST;
 			
-			_send(_loaderPseudo, _request, "Pseudo");  
+			_send(_loaderPseudo, _request, CREATE_PLAYER);  
         }
 		
-		public function getJoueurs():void
+		public function getPlayers():void
 		{
-			_request = new URLRequest(Config.URL + "getJoueurs");
+			_request = new URLRequest(Config.URL + GET_PLAYERS);
 			_request.method = URLRequestMethod.POST;
             
-			_send(_loaderJoueurs, _request, "Joueurs");
+			_send(_loaderJoueurs, _request, GET_PLAYERS);
         }
 		
 		public function getImpacts():void
 		{
-			_request = new URLRequest(Config.URL + "getImpacts");
+			_request = new URLRequest(Config.URL + GET_IMPACTS);
 			_request.method = URLRequestMethod.POST;
             
-			_send(_loaderImpacts, _request, "Impacts");
+			_send(_loaderImpacts, _request, GET_IMPACTS);
         }
 		
 		public function sendPlayerMove():void
@@ -120,7 +131,7 @@ package fr.citygame.un.utils
 			_urlVars.longitude = Data.playerVo.localisation.longitude;
 			_urlVars.direction = rad2deg(Data.rotation);
 			
-            _request = new URLRequest(Config.URL + "deplacement");
+            _request = new URLRequest(Config.URL + SEND_MOVE);
 			_request.data = _urlVars;
 			_request.method = URLRequestMethod.POST;
 			
@@ -135,7 +146,7 @@ package fr.citygame.un.utils
 			_urlVars.direction = rad2deg(Data.rotation);
 			_urlVars.puissance = pPuissance;
 			
-            _request = new URLRequest(Config.URL + "tir");
+            _request = new URLRequest(Config.URL + SEND_SHOT);
 			_request.data = _urlVars;
 			_request.method = URLRequestMethod.POST;
 			
@@ -151,25 +162,28 @@ package fr.citygame.un.utils
             dispatcher.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
         }
  
-        private function completeHandler(event:Event):void {
-            //trace("completeHandler: " + event.currentTarget.data);
+        private function completeHandler(event:Event):void
+		{
+            trace("completeHandler: " + event.currentTarget.data);
 			
 			switch(URLLoader(event.currentTarget).dataFormat)
-			{
-				case "Joueurs":
-					parser.parseJoueurs(XML(event.currentTarget.data));
+			{				
+				case GET_PLAYERS :
+					parser.parsePlayers(XML(event.currentTarget.data));
 					if (_firstCallPlayers) {
-						dispatchEvent(new Event(Event.COMPLETE));
 						_firstCallPlayers = false;
+						dispatchEvent(new DataEvent(DataEvent.PLAYERS_REFRESHED));
 					}
 					break;
-				case "Impacts":
-					trace("completeHandler: " + event.currentTarget.data);
+					
+				case GET_IMPACTS :
 					parser.parseImpacts(XML(event.currentTarget.data));
+					dispatchEvent(new DataEvent(DataEvent.IMPACTS_REFRESHED));
 					break;
-				case "Pseudo":
+					
+				case CREATE_PLAYER :
 					parser.parseCreatePlayer(XML(event.currentTarget.data));
-					dispatchEvent(new Event(Event.COMPLETE));
+					dispatchEvent(new DataEvent(DataEvent.PLAYER_CREATED));
 					break;
 			}
 			

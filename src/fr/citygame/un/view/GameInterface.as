@@ -35,12 +35,17 @@ package fr.citygame.un.view
 		private var _timer:Timer;
 		//private var _image:Image;
 		
-		/*private var btLeft:Button;
-		private var btRight:Button;*/
+		private var btLeft:Button;
+		private var btRight:Button;
+		private var _count:uint;
+		
+		private var _sr:SendReceive;
 		
 		public function GameInterface() 
-		{
+		{			
 			Config.playerYposition = Config.stageHeight * 2 / 3;
+			
+			_sr = SendReceive.getInstance();
 			
 			_timer = new Timer(Config.TIMER_DELAY);
 			
@@ -48,7 +53,7 @@ package fr.citygame.un.view
 			_map.initPosition();
 			addChild(_map);
 			
-			/*btLeft = new Button(Texture.fromColor(40, 40, 0xCCFFFFFF), "<", null);
+			btLeft = new Button(Texture.fromColor(40, 40, 0xCCFFFFFF), "<", null);
 			btLeft.x = 60;
 			btLeft.y = Config.stageHeight - 280;
 			addChild(btLeft);
@@ -56,7 +61,7 @@ package fr.citygame.un.view
 			btRight = new Button(Texture.fromColor(40, 40, 0xCCFFFFFF), ">", null);
 			btRight.x = Config.stageWidth - 20 - 80;
 			btRight.y = Config.stageHeight - 280;
-			addChild(btRight);*/
+			addChild(btRight);
 			
 			_timers = new Timers();
 			_timers.y = 10;
@@ -65,9 +70,17 @@ package fr.citygame.un.view
 		
 		public function onTick(event:TimerEvent = null):void 
 		{
+			_count++;
+			
 			_map.onTick();
 			
 			_timers.onTick();
+			
+			if (_count == Config.REFRESH_PLAYERS_DELAY) {
+				_sr.sendPlayerMove();
+				_sr.getPlayers();
+				_count = 0;
+			}
 		}
 		
 		private function _activateFireMode():void
@@ -113,15 +126,17 @@ package fr.citygame.un.view
 		{
 			this.alpha = 0;
 			x = Config.stageWidth;
+			_count = 0;
 			
+			// Déclenche le onTick avant de lancer le compteur pour récupérer les joueurs au démarrage.
+			onTick();
+					
 			TweenNano.to(this, .5, { alpha: 1, x: 0, onComplete:
 				function():void {
 					_map.transiIn();
 					addListeners();
 					if(Data.playerVo.life > 0)	_activateFireMode();
 					else 						_deactivateFireMode();
-					// Déclenche le onTick avavnt de lancer le compeur pour récupérer les joueurs au démarrage.
-					onTick();
 					_timer.start();
 				}
 			} );
@@ -145,11 +160,11 @@ package fr.citygame.un.view
 		public function addListeners():void 
 		{
 			_timer.addEventListener(TimerEvent.TIMER, onTick);
-			/*btLeft.addEventListener(TouchEvent.TOUCH, _btLeftTouchHandler);
-			btRight.addEventListener(TouchEvent.TOUCH, _btRightTouchHandler);*/
+			btLeft.addEventListener(TouchEvent.TOUCH, _btLeftTouchHandler);
+			btRight.addEventListener(TouchEvent.TOUCH, _btRightTouchHandler);
 		}
 		
-		/*private function _btLeftTouchHandler(e:TouchEvent):void 
+		private function _btLeftTouchHandler(e:TouchEvent):void 
 		{
 			var touch:Touch = e.getTouch(btLeft);
 			
@@ -181,13 +196,14 @@ package fr.citygame.un.view
 					default : break;
 				}
 			}
-		}*/
+		}
 		
 		public function removeListeners():void 
 		{
 			_timer.removeEventListener(TimerEvent.TIMER, onTick);
-			/*btLeft.removeEventListener(TouchEvent.TOUCH, _btLeftTouchHandler);
-			btRight.removeEventListener(TouchEvent.TOUCH, _btRightTouchHandler);*/
+			
+			btLeft.removeEventListener(TouchEvent.TOUCH, _btLeftTouchHandler);
+			btRight.removeEventListener(TouchEvent.TOUCH, _btRightTouchHandler);			
 		}
 
 		

@@ -11,12 +11,20 @@ package fr.citygame.un.data
 	{
 		public static var rotation:Number;
 		public static var playersVo:Vector.<PlayerVO>;
-		public static var playersVoObjects:Object;
 		public static var impactsVo:Vector.<ImpactVO>;
 		public static var gameVo:GameVO;
-		public static var playerVo:PlayerVO = new PlayerVO(0, "", 0, null, null, 0);
+		
+		public static var playerVo:PlayerVO;
 		
 		public static var phaseDeJeu	:String;
+		
+		public static function getPlayerVO(pId:uint):PlayerVO
+		{
+			for each(var p:PlayerVO in playersVo) {
+				if (p.id == pId)	return p;
+			}
+			return null;
+		}
 	}
 
 }
